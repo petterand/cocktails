@@ -1,6 +1,8 @@
 An application seen as a portfolio app.
 
-See an early demo here ![demo](demo.gif)
+See an early demo here
+
+<img src="demo.gif" height="500px">
 
 Main technologies:
 
