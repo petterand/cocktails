@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="21.485mm" height="52.112mm" version="1.1" viewBox="0 0 21.485 52.112" xmlns="http://www.w3.org/2000/svg">
+ <g transform="translate(-.26458 -.26458)">
+  <g transform="translate(-24.57 -13.339)">
+   <path d="m25.232 36.215 1.8898 29.104h16.064l1.8898-29.104zm1.6387 1.3477h16.666l-1.2821 26.367h-14.101z" stroke="#000" stroke-linejoin="round" stroke-width=".79375"/>
+   <path d="m28.539 39.458h13.511l-1.0393 22.6h-11.432z" stroke-width="0"/>
+  </g>
+ </g>
+ <g transform="translate(-.26458 -.26458)">
+  <g transform="translate(-.24756 -.60411)">
+   <path d="m8.6053 1.2736-7.4717 23.94 18.181 0.144 2.2776-21.624zm1.0988 1.2769 10.398 1.9698-1.8325 20.289-15.598 0.245z" stroke="#000" stroke-linejoin="round" stroke-width=".80988"/>
+   <path d="m10.324 4.0145 8.5656 1.6415-1.692 18.157-13.08 0.58838z" stroke-width="0"/>
+  </g>
+ </g>
+</svg>

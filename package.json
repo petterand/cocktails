@@ -1,0 +1,22 @@
+{
+   "version": "0.0.1",
+   "name": "cocktails",
+   "private": true,
+   "scripts": {
+      "build": "cd cocktails-web && webpack",
+      "bundle": "cd cocktails-web && webpack --mode development",
+      "start": "cd cocktails-web && webpack-dev-server --open --mode development",
+      "start:server": "node cocktails-server/src/index.js",
+      "test:web": "cd cocktails-web && jest --watchAll"
+   },
+   "keywords": [],
+   "author": "",
+   "license": "ISC",
+   "description": "",
+   "devDependencies": {},
+   "dependencies": {},
+   "workspaces": [
+      "cocktails-server",
+      "cocktails-web"
+   ]
+}
