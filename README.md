@@ -1,6 +1,6 @@
 An application seen as a portfolio app.
 
-See an early [demo here](demo.mov)
+See an early demo here ![demo](demo.gif)
 
 Main technologies:
 
