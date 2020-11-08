@@ -1,29 +1,32 @@
-function removeMeasurements(str) {
+
+
+function removeMeasurements(str:String) {
    if (!str.includes('ml')) {
       return str;
    }
    return str.split('ml')[1].trim();
 }
 
-export const arrayIntersection = (arr1, arr2) =>
+export const arrayIntersection = (arr1:Array<String>, arr2:Array<String>) =>
    arr1.filter((val) => arr2.includes(val));
 
-export const arrayIntersects = (arr1, arr2) =>
+export const arrayIntersects = (arr1:Array<String>, arr2:Array<String>) =>
    arrayIntersection(arr1, arr2).length > 0;
 
-export function buildFilterObject(recipes) {
-   const filterObject = { names: [], ingredients: [] };
+export function buildFilterObject(recipes:Array<Recipe>) {
+   const names = [];
+   let ingredients:Array<String> = [];
    for (let recipe of recipes) {
-      filterObject.names.push(recipe.name);
-      filterObject.ingredients = [
-         ...filterObject.ingredients,
+      names.push(recipe.name);
+      ingredients = [
+         ...ingredients,
          ...recipe.ingredients.map(removeMeasurements),
       ];
    }
-   return filterObject;
+   return {names, ingredients};
 }
 
-export const filterRecipes = (values) => (recipe) => {
+export const filterRecipes = (values:Array<string>) => (recipe:Recipe) => {
    if (values.length === 0) {
       return true;
    }
@@ -45,7 +48,7 @@ export const filterRecipes = (values) => (recipe) => {
    return ingredientMatches;
 };
 
-export function getTop5Ingredients(ingredients) {
+export function getTop5Ingredients(ingredients:Array<string>) {
    if (!ingredients) {
       return [];
    }
@@ -58,14 +61,14 @@ export function getTop5Ingredients(ingredients) {
    }, {});
 
    const sortedIngredients = Object.entries(occurencesObj)
-      .sort((a, b) => b[1] - a[1])
+      .sort((a, b) => <number>b[1] - <number>a[1])
       .map((entry) => entry[0])
       .slice(0, 5);
 
    return sortedIngredients;
 }
 
-export function getSearchResultList(filterValues, searchString) {
+export function getSearchResultList(filterValues:FilterValues, searchString:String) {
    const combined = [...filterValues.names, ...filterValues.ingredients];
 
    const filtered = combined.filter((ing) =>
@@ -75,4 +78,4 @@ export function getSearchResultList(filterValues, searchString) {
    return [...new Set(filtered)];
 }
 
-const toLowerCase = (s) => s.toLowerCase();
+const toLowerCase = (s:String) => s.toLowerCase();

@@ -1,12 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { config } from 'dotenv';
 import 'core-js/stable';
 import 'regenerator-runtime/runtime';
 
 import App from './app';
-
-config();
 
 if ('serviceWorker' in navigator) {
    window.addEventListener('load', () => {

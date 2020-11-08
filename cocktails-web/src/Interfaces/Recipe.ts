@@ -1,0 +1,5 @@
+interface Recipe {
+   name:string,
+   ingredients: Array<string>,
+   description?: string
+}

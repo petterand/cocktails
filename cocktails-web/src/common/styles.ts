@@ -13,7 +13,11 @@ const openSearchResultStyle = css`
    padding: 8px 8px 8px 0px;
 `;
 
-export const SearchResultContainer = styled.div`
+interface ResultProps {
+   readonly open: boolean;
+}
+
+export const SearchResultContainer = styled.div<ResultProps>`
    overflow: hidden;
    top: 48px;
    position: absolute;

@@ -1,11 +1,18 @@
+const webpack = require('webpack');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const Dotenv = require('dotenv-webpack');
+const dotenv = require('dotenv');
 const path = require('path');
 
 const cssRegex = /\.css$/;
 const cssModuleRegex = /\.module\.css$/;
 const lessRegex = /\.less$/;
+
+const env = dotenv.config().parsed;
+const envKeys = Object.keys(env).reduce((prev, next) => {
+   prev[`process.env.${next}`] = JSON.stringify(env[next]);
+   return prev;
+}, {});
 
 const getStyleLoaders = (cssOptions, preProcessor) => {
    const loaders = [
@@ -29,14 +36,23 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
 };
 
 module.exports = {
+   devtool: 'inline-source-map',
+   resolve: {
+      extensions: ['.tsx', '.ts', '.js'],
+   },
    module: {
       rules: [
          {
-            test: /\.(js|jsx)$/,
-            exclude: /node_modules|build/,
+            test: /\.jsx?$/,
+            exclude: /node_modules|build|dist/,
             use: {
                loader: 'babel-loader',
             },
+         },
+         {
+            test: /\.tsx?$/,
+            use: 'ts-loader',
+            exclude: /node_modules/,
          },
          {
             test: cssRegex,
@@ -73,9 +89,6 @@ module.exports = {
          favicon: './public/favicon.png',
       }),
       new CopyPlugin({ patterns: [{ from: './public/sw.js' }] }),
-      new Dotenv(),
+      new webpack.DefinePlugin(envKeys),
    ],
-   node: {
-      fs: 'empty',
-   },
 };
