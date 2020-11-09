@@ -30,8 +30,12 @@ const AddRecipe = ({ addRecipe }) => {
       const recipe = el.value;
 
       if (recipe) {
-         addRecipe(processRecipe(recipe));
-         setExpanded(false);
+         try {
+            addRecipe(processRecipe(recipe));
+            setExpanded(false);
+         } catch (e) {
+            console.error(e);
+         }
       }
    };
 

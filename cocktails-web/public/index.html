@@ -1,52 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-   <link rel="shortcut icon" type="image/png" href="/favicon.png" />
-   <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;700&display=swap" rel="stylesheet">
-   <title>Cocktails</title>
-   <style>
-      :root {
-         --vivid-tangerine: #ffa69eff;
-         --eggshell: #faf3ddff;
-         --aero-blue: #b8f2e6ff;
-         --powder-blue: #aed9e0ff;
-         --black-coral: #5e6472ff;
-         --timber-wolf: #DEDBD2ff;
-         --battleship-grey: #898989;
-         --viridian: #328474;
-         --placeholder: #909090;
-         --list-columns: 2;
-      }
+   <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" />
+      <link rel="shortcut icon" type="image/png" href="/favicon.png" />
 
-      * {
-         margin: 0;
-         padding: 0;
-         box-sizing: border-box;
-      }
-      html {
-         height: 100%;
-      }
-      body {
-         font-family: 'Ubuntu', sans-serif;
-         font-size: 16px;
-         height: 100%;
-      }
-      .main, .main > div {
-         height: 100%;
-      }
-      @media screen and (min-width: 540px ) {
-         :root {
-            --list-columns: 3;
+      <title>Cocktails</title>
+      <style>
+         /* latin-ext */
+         @font-face {
+            font-family: 'Ubuntu';
+            font-style: normal;
+            font-weight: 300;
+            font-display: swap;
+            src: local('Ubuntu Light'), local('Ubuntu-Light'),
+               url(https://fonts.gstatic.com/s/ubuntu/v15/4iCv6KVjbNBYlgoC1CzjvmyNPYZvg7UI.woff2)
+                  format('woff2');
+            unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB,
+               U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
          }
-      }
-      
+         /* latin */
+         @font-face {
+            font-family: 'Ubuntu';
+            font-style: normal;
+            font-weight: 300;
+            font-display: swap;
+            src: local('Ubuntu Light'), local('Ubuntu-Light'),
+               url(https://fonts.gstatic.com/s/ubuntu/v15/4iCv6KVjbNBYlgoC1CzjsGyNPYZvgw.woff2)
+                  format('woff2');
+            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+               U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191,
+               U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+         }
+         /* latin-ext */
+         @font-face {
+            font-family: 'Ubuntu';
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+            src: local('Ubuntu Regular'), local('Ubuntu-Regular'),
+               url(https://fonts.gstatic.com/s/ubuntu/v15/4iCs6KVjbNBYlgoKcQ72nU6AF7xm.woff2)
+                  format('woff2');
+            unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB,
+               U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+         }
+         /* latin */
+         @font-face {
+            font-family: 'Ubuntu';
+            font-style: normal;
+            font-weight: 400;
+            font-display: swap;
+            src: local('Ubuntu Regular'), local('Ubuntu-Regular'),
+               url(https://fonts.gstatic.com/s/ubuntu/v15/4iCs6KVjbNBYlgoKfw72nU6AFw.woff2)
+                  format('woff2');
+            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+               U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191,
+               U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+         }
+         /* latin-ext */
+         @font-face {
+            font-family: 'Ubuntu';
+            font-style: normal;
+            font-weight: 500;
+            font-display: swap;
+            src: local('Ubuntu Medium'), local('Ubuntu-Medium'),
+               url(https://fonts.gstatic.com/s/ubuntu/v15/4iCv6KVjbNBYlgoCjC3jvmyNPYZvg7UI.woff2)
+                  format('woff2');
+            unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB,
+               U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+         }
+         /* latin */
+         @font-face {
+            font-family: 'Ubuntu';
+            font-style: normal;
+            font-weight: 500;
+            font-display: swap;
+            src: local('Ubuntu Medium'), local('Ubuntu-Medium'),
+               url(https://fonts.gstatic.com/s/ubuntu/v15/4iCv6KVjbNBYlgoCjC3jsGyNPYZvgw.woff2)
+                  format('woff2');
+            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+               U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191,
+               U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+         }
+         /* latin-ext */
+         @font-face {
+            font-family: 'Ubuntu';
+            font-style: normal;
+            font-weight: 700;
+            font-display: swap;
+            src: local('Ubuntu Bold'), local('Ubuntu-Bold'),
+               url(https://fonts.gstatic.com/s/ubuntu/v15/4iCv6KVjbNBYlgoCxCvjvmyNPYZvg7UI.woff2)
+                  format('woff2');
+            unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB,
+               U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
+         }
+         /* latin */
+         @font-face {
+            font-family: 'Ubuntu';
+            font-style: normal;
+            font-weight: 700;
+            font-display: swap;
+            src: local('Ubuntu Bold'), local('Ubuntu-Bold'),
+               url(https://fonts.gstatic.com/s/ubuntu/v15/4iCv6KVjbNBYlgoCxCvjsGyNPYZvgw.woff2)
+                  format('woff2');
+            unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+               U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191,
+               U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+         }
 
-   </style>
-</head>
-<body>
-   <div id="app" class="main"></div>
-</body>
+         :root {
+            --vivid-tangerine: #ffa69eff;
+            --eggshell: #faf3ddff;
+            --aero-blue: #b8f2e6ff;
+            --powder-blue: #aed9e0ff;
+            --black-coral: #5e6472ff;
+            --timber-wolf: #dedbd2ff;
+            --battleship-grey: #898989;
+            --viridian: #328474;
+            --placeholder: #909090;
+            --list-columns: 2;
+         }
+
+         * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+         }
+         html {
+            height: 100%;
+         }
+         body {
+            font-family: 'Ubuntu', sans-serif;
+            font-size: 16px;
+            height: 100%;
+         }
+
+         @media screen and (min-width: 540px) {
+            :root {
+               --list-columns: 3;
+            }
+         }
+      </style>
+   </head>
+   <body>
+      <div id="app" class="main"></div>
+   </body>
 </html>

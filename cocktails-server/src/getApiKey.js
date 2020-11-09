@@ -30,6 +30,11 @@ exports.handler = async (event) => {
    const response = {
       statusCode: 200,
       body: JSON.stringify(body),
+      headers: {
+         'Content-Type': 'application/json',
+         'Access-Control-Allow-Origin': '*',
+         'Access-Control-Allow-Methods': 'OPTIONS,GET',
+      },
    };
    return response;
 };

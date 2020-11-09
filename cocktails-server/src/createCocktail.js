@@ -19,7 +19,14 @@ exports.handler = async (event) => {
 
       try {
          await dynamoDb.put(params).promise();
-         return { statusCode: 200 };
+         return {
+            statusCode: 200,
+            headers: {
+               'Content-Type': 'application/json',
+               'Access-Control-Allow-Origin': '*',
+               'Access-Control-Allow-Methods': 'OPTIONS,GET',
+            },
+         };
       } catch (e) {
          return {
             statusCode: 500,

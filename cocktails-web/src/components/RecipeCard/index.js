@@ -76,8 +76,8 @@ const RecipeCard = (props) => {
          </RecipeContent>
          <BackMenu>
             <div>
-               <Icon src={edit} />
-               <Icon src={remove} />
+               <Icon width="26px" height="26px" src={edit} />
+               <Icon width="26px" height="26px" src={remove} />
             </div>
          </BackMenu>
       </Card>

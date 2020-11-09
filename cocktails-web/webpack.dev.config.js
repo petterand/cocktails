@@ -36,8 +36,12 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
 };
 
 module.exports = {
-   resolve: {
-      extensions: ['.ts', '.js'],
+   mode: 'development',
+   optimization: {
+      runtimeChunk: true,
+   },
+   devServer: {
+      compress: true,
    },
    module: {
       rules: [
@@ -47,6 +51,9 @@ module.exports = {
             exclude: /node_modules|build|dist/,
             use: {
                loader: 'babel-loader',
+               options: {
+                  cacheDirectory: true,
+               },
             },
          },
          {

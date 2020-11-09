@@ -49,3 +49,21 @@ export const SearchInput = styled.input`
       color: var(--placeholder);
    }
 `;
+
+export const Input = styled.input`
+   border: 1px solid var(--battleship-grey);
+   font-size: 16px;
+   outline: none;
+   background: #fff;
+   padding: 8px 4px;
+   font-size: 0.85rem;
+`;
+
+export const Button = styled.button`
+   border: none;
+   border-radius: 4px;
+   background-color: var(--viridian);
+   color: #fff;
+   padding: 8px 16px;
+   font-size: 0.85rem;
+`;
