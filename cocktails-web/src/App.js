@@ -1,4 +1,3 @@
-import React from 'react';
 import Cocktails from './components/Cocktails';
 import ModalContextProvider from './contextProviders/modalContext';
 

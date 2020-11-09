@@ -9,11 +9,13 @@ const SearchAndFilter = (props) => {
    const [keepFocus, setKeepFocus] = useState(false);
 
    const toggle = (val, keepFocus) => {
-      setShowFilter((s) => !s);
-      if (val) {
-         setSearchValue(val);
+      if (!props.menuVisible) {
+         setShowFilter((s) => !s);
+         if (val) {
+            setSearchValue(val);
+         }
+         setKeepFocus(Boolean(keepFocus));
       }
-      setKeepFocus(Boolean(keepFocus));
    };
 
    const onFilter = (f) => {
@@ -35,10 +37,10 @@ const SearchAndFilter = (props) => {
          {showFilter && (
             <Filter
                filterValues={props.filterValues}
-               onFilter={props.onFilter}
                toggle={toggle}
                onFilter={onFilter}
                keepFocus={keepFocus}
+               menuVisible={props.menuVisible}
             />
          )}
       </>

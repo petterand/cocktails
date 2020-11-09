@@ -36,6 +36,10 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
 };
 
 module.exports = {
+   mode: 'development',
+   devServer: {
+      hot: true,
+   },
    resolve: {
       extensions: ['.ts', '.js'],
    },
@@ -70,10 +74,7 @@ module.exports = {
          },
          {
             test: /\.svg$/,
-            loader: require.resolve('file-loader'),
-            options: {
-               name: 'assets/[name].[hash:8].[ext]',
-            },
+            type: 'asset/inline',
          },
       ],
    },
@@ -83,7 +84,13 @@ module.exports = {
          filename: './index.html',
          favicon: './public/favicon.png',
       }),
-      new CopyPlugin({ patterns: [{ from: './public/sw.js' }] }),
+      new CopyPlugin({
+         patterns: [
+            { from: './public/sw.js' },
+            { from: './public/favicon.png' },
+         ],
+      }),
       new webpack.DefinePlugin(envKeys),
+      new webpack.HotModuleReplacementPlugin(),
    ],
 };

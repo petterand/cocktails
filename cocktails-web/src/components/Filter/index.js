@@ -35,7 +35,9 @@ const Filter = (props) => {
 
    const toggleList = (e) => {
       e.stopPropagation();
-      setFiltersOpen((s) => !s);
+      if (!props.menuVisible) {
+         setFiltersOpen((s) => !s);
+      }
    };
 
    useEffect(() => {

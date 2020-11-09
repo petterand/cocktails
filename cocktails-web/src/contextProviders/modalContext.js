@@ -21,8 +21,10 @@ const ModalContextProvider = (props) => {
    return (
       <ModalContext.Provider value={{ openModal, closeModal }}>
          {props.children}
-         {openModals.map((m) => (
-            <Modal {...m.props}>{m.body}</Modal>
+         {openModals.map((m, i) => (
+            <Modal key={i} {...m.props}>
+               {m.body}
+            </Modal>
          ))}
       </ModalContext.Provider>
    );

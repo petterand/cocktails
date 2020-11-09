@@ -21,6 +21,6 @@
       "types": ["node"],
       "lib": ["es6", "dom"]
    },
-   "include": ["src/**/*"],
+   "include": ["src"],
    "exclude": ["node_modules"]
 }

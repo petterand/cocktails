@@ -2,10 +2,13 @@ import React, { useEffect, useRef } from 'react';
 import anime from 'animejs/lib/anime.es.js';
 import edit from '../../../images/edit.svg';
 import remove from '../../../images/remove.svg';
+import { hasKey } from '../../common/auth';
 import { RecipeContent, Card, BackMenu, Icon } from './styles';
 
 const RecipeCard = (props) => {
    const containerRef = useRef(null);
+
+   const noop = () => {};
 
    const animate = (val, duration = 300) =>
       anime({
@@ -15,7 +18,7 @@ const RecipeCard = (props) => {
       });
 
    useEffect(() => {
-      if (props.recipeIndex === 0) {
+      if (hasKey() && props.recipeIndex === 0) {
          setTimeout(() => animate(-25, 700), 1000);
          setTimeout(() => animate(0), 2500);
       }
@@ -24,7 +27,7 @@ const RecipeCard = (props) => {
    const isMenuOpen = () =>
       containerRef.current.style.transform.includes('-50px');
 
-   const onDoubleClick = (e) => {
+   const onClick = (e) => {
       if (!isMenuOpen()) {
          animate(-50);
       } else {
@@ -57,13 +60,15 @@ const RecipeCard = (props) => {
       }
    };
 
+   const setHandler = (handler) => (hasKey() ? handler : noop);
+
    return (
       <Card>
          <RecipeContent
-            onClick={onDoubleClick}
-            onTouchStart={touchStart}
-            onTouchMove={touchMove}
-            onTouchEnd={touchEnd}
+            onClick={setHandler(onClick)}
+            onTouchStart={setHandler(touchStart)}
+            onTouchMove={setHandler(touchMove)}
+            onTouchEnd={setHandler(touchEnd)}
             ref={containerRef}
          >
             <p>{props.recipe.name}</p>

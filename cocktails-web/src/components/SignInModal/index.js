@@ -5,8 +5,14 @@ import { Button, Input } from '../../common/styles';
 import { getAndSetKey } from '../../common/auth';
 
 const Wrapper = styled.div`
-   display: flex;
-   flex-direction: column;
+   padding: 0 16px;
+   h3 {
+      margin-bottom: 16px;
+   }
+   form {
+      display: flex;
+      flex-direction: column;
+   }
    input {
       margin-bottom: 8px;
       font-size: 0.8rem;
@@ -38,8 +44,21 @@ const SignInModalBody = (props) => {
    };
    return (
       <Wrapper>
-         <Input type="text" placeholder="Användarnamn" ref={userRef} />
-         <Input type="password" placeholder="Lösenord" ref={passwordRef} />
+         <h3>Logga in</h3>
+         <form>
+            <Input
+               type="text"
+               autoComplete="username"
+               placeholder="Användarnamn"
+               ref={userRef}
+            />
+            <Input
+               type="password"
+               autoComplete="current-password"
+               placeholder="Lösenord"
+               ref={passwordRef}
+            />
+         </form>
          <div>
             <Button onClick={onClick}>Logga in</Button>
          </div>

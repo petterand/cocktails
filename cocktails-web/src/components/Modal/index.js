@@ -1,3 +1,4 @@
+import { useModalContext } from '../../contextProviders/modalContext';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -16,14 +17,26 @@ const ModalWrapper = styled.div`
 
 const ModalContent = styled.div`
    background-color: #fff;
-   width: 200px;
+   width: 75%;
    padding: 16px;
+   position: relative;
+   > span {
+      font-size: 32px;
+      display: block;
+      position: absolute;
+      right: 16px;
+      top: 6px;
+   }
 `;
 
 const Modal = (props) => {
+   const { closeModal } = useModalContext();
    return (
       <ModalWrapper>
-         <ModalContent>{props.children}</ModalContent>
+         <ModalContent>
+            <span onClick={closeModal}>×</span>
+            {props.children}
+         </ModalContent>
       </ModalWrapper>
    );
 };
