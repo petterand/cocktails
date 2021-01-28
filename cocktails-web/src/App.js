@@ -1,10 +1,13 @@
+import RecipeContextProvider from './contextProviders/recipeContext';
 import Cocktails from './components/Cocktails';
 import ModalContextProvider from './contextProviders/modalContext';
 
 const App = () => {
    return (
       <ModalContextProvider>
-         <Cocktails />
+         <RecipeContextProvider>
+            <Cocktails />
+         </RecipeContextProvider>
       </ModalContextProvider>
    );
 };

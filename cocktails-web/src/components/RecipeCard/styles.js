@@ -5,6 +5,8 @@ export const RecipeContent = styled.div`
    padding: 16px;
    margin-bottom: 16px;
    background-color: white;
+   z-index: 2;
+   position: relative;
 
    > div {
       white-space: pre-line;
@@ -33,7 +35,7 @@ export const BackMenu = styled.div`
    right: 0;
    bottom: 0;
    background-color: var(--viridian);
-   z-index: -1;
+   z-index: 1;
    display: flex;
    > div {
       width: 50px;
@@ -42,10 +44,12 @@ export const BackMenu = styled.div`
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      > img {
+      > div {
          margin-top: 12px;
-         &:hover {
-            border: 1px solid white;
+         > img {
+            &:hover {
+               border: 1px solid white;
+            }
          }
       }
    }

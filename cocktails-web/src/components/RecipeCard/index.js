@@ -4,9 +4,14 @@ import edit from '../../../images/edit.svg';
 import remove from '../../../images/remove.svg';
 import { hasKey } from '../../common/auth';
 import { RecipeContent, Card, BackMenu, Icon } from './styles';
+import { useModalContext } from '../../contextProviders/modalContext';
+import { useRecipeContext } from '../../contextProviders/recipeContext';
+import ConfirmModal from '../ConfirmModal';
 
 const RecipeCard = (props) => {
    const containerRef = useRef(null);
+   const { openModal } = useModalContext();
+   const { removeRecipe } = useRecipeContext();
 
    const noop = () => {};
 
@@ -14,7 +19,7 @@ const RecipeCard = (props) => {
       anime({
          targets: containerRef.current,
          translateX: val,
-         duration: 300,
+         duration,
       });
 
    useEffect(() => {
@@ -27,11 +32,13 @@ const RecipeCard = (props) => {
    const isMenuOpen = () =>
       containerRef.current.style.transform.includes('-50px');
 
-   const onClick = (e) => {
-      if (!isMenuOpen()) {
-         animate(-50);
-      } else {
-         animate(0);
+   const onClick = () => {
+      if (hasKey()) {
+         if (!isMenuOpen()) {
+            animate(-50);
+         } else {
+            animate(0);
+         }
       }
    };
 
@@ -62,6 +69,19 @@ const RecipeCard = (props) => {
 
    const setHandler = (handler) => (hasKey() ? handler : noop);
 
+   const onRemove = (id) => async () => {
+      const remove = async () => {
+         removeRecipe(id);
+      };
+      openModal({
+         body: (
+            <ConfirmModal onPrimary={remove}>
+               Är du säker på att du vill ta bort receptet?
+            </ConfirmModal>
+         ),
+      });
+   };
+
    return (
       <Card>
          <RecipeContent
@@ -82,7 +102,9 @@ const RecipeCard = (props) => {
          <BackMenu>
             <div>
                <Icon width="26px" height="26px" src={edit} />
-               <Icon width="26px" height="26px" src={remove} />
+               <div onClick={onRemove(props.recipe.id)}>
+                  <Icon width="26px" height="26px" src={remove} />
+               </div>
             </div>
          </BackMenu>
       </Card>

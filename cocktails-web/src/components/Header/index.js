@@ -3,12 +3,16 @@ import styled from 'styled-components';
 import anime from 'animejs/lib/anime.es.js';
 import SearchAndFilter from '../SearchAndFilter';
 import signinIcon from '../../../images/signin.svg';
+import randomIcon from '../../../images/random.svg';
 import { useModalContext } from '../../contextProviders/modalContext';
 import SignInModalBody from '../SignInModal';
+import { hasKey } from '../../common/auth';
+import useDeviceSize from '../../common/useDeviceSize';
 
 const Header = (props) => {
    const headerRef = useRef(null);
    const [menuVisible, setMenuVisible] = useState(false);
+   const deviceSize = useDeviceSize();
 
    const animate = async (val) =>
       anime({
@@ -44,14 +48,25 @@ const Header = (props) => {
       }
    };
 
+   const setHandler = (handler) =>
+      deviceSize === 'small' ? handler : () => {};
+
+   const onMenuClick = () => {
+      animate(0);
+      setMenuVisible(false);
+   };
+
    return (
       <HeaderWrapper>
-         <Menu onClick={(e) => animate(0)} />
+         <Menu
+            onRandomize={props.onRandomize}
+            onClick={setHandler(onMenuClick)}
+         />
          <HeaderElement
             ref={headerRef}
-            onTouchStart={touchStart}
-            onTouchMove={touchMove}
-            onTouchEnd={touchEnd}
+            onTouchStart={setHandler(touchStart)}
+            onTouchMove={setHandler(touchMove)}
+            onTouchEnd={setHandler(touchEnd)}
          >
             <SearchAndFilter {...props} menuVisible={menuVisible} />
          </HeaderElement>
@@ -65,10 +80,26 @@ const Menu = (props) => {
       e.stopPropagation();
       openModal({ body: <SignInModalBody /> });
    };
+
+   const randomize = (e) => {
+      e.stopPropagation();
+      props.onRandomize();
+   };
+
    return (
       <HeaderMenu onClick={props.onClick}>
-         <MenuItem onClick={signIn}>
-            <img src={signinIcon} alt="sign in" width="32px" height="32px" />
+         {!hasKey() && (
+            <MenuItem onClick={signIn}>
+               <img src={signinIcon} alt="sign in" width="32px" height="32px" />
+            </MenuItem>
+         )}
+         <MenuItem onClick={randomize}>
+            <img
+               src={randomIcon}
+               alt="random icon"
+               width="32px"
+               height="32px"
+            />
          </MenuItem>
       </HeaderMenu>
    );
@@ -82,6 +113,9 @@ const MenuItem = styled.div`
 
 const HeaderWrapper = styled.div`
    position: relative;
+   @media screen and (min-width: 540px) {
+      display: flex;
+   }
 `;
 
 const HeaderMenu = styled.div`
@@ -104,6 +138,12 @@ const HeaderElement = styled.div`
    background-color: #fff;
    height: 67px;
    padding: 0 8px;
+   z-index: 3;
+
+   @media screen and (min-width: 540px) {
+      position: static;
+      width: 80%;
+   }
 `;
 
 export default Header;

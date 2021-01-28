@@ -1,40 +1,38 @@
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import Header from '../Header';
 import AddRecipe from '../AddRecipe';
 import RecipeList from '../RecipeList';
-import { addCocktail, getCocktails } from '../../common/api';
 import { filterRecipes, buildFilterObject } from '../../common/filters';
 import { hasKey } from '../../common/auth';
+import { useRecipeContext } from '../../contextProviders/recipeContext';
 
 const ContentWrapper = styled.div`
    padding: 0 16px;
+   margin-top: 16px;
 `;
 
-const Cocktails = (props) => {
-   const [recipes, setRecipes] = useState([]);
+const Cocktails = () => {
+   const { recipes, addRecipe } = useRecipeContext();
    const [filters, setFilters] = useState([]);
    const [filterValues, setFilterValues] = useState({});
-
-   useEffect(() => {
-      const fetchCocktails = async () => {
-         const cocktails = await getCocktails();
-         setRecipes(cocktails);
-      };
-      fetchCocktails();
-   }, []);
 
    useEffect(() => {
       setFilterValues(buildFilterObject(recipes));
    }, [recipes]);
 
-   const addRecipe = (recipe) => {
-      addCocktail(recipe);
-      setRecipes((state) => [...state, recipe]);
+   const onRandomize = () => {
+      const randomIndex = Math.floor(Math.random() * recipes.length);
+      setFilters([recipes[randomIndex].name]);
    };
+
    return (
       <>
-         <Header onFilter={setFilters} filterValues={filterValues} />
+         <Header
+            onFilter={setFilters}
+            filterValues={filterValues}
+            onRandomize={onRandomize}
+         />
          <ContentWrapper>
             {hasKey() && <AddRecipe addRecipe={addRecipe} />}
             <RecipeList recipes={recipes.filter(filterRecipes(filters))} />

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 
 const GridContainer = styled.div`
@@ -9,12 +9,12 @@ const GridContainer = styled.div`
    column-gap: 16px;
 `;
 
-const getColumns = (children) => {
+const getColumns = (children, noCols) => {
    const items = [...children];
    const columns = new Array(2);
 
    for (let i = 0; i < items.length; i++) {
-      const colIndex = i % 2;
+      const colIndex = i % noCols;
       if (!columns[colIndex]) {
          columns[colIndex] = [];
       }
@@ -25,7 +25,7 @@ const getColumns = (children) => {
 };
 
 const renderChildren = (props) => {
-   const cols = getColumns(props.children);
+   const cols = getColumns(props.children, props.noCols);
 
    return cols.map((items, i) => <div key={i}>{items}</div>);
 };

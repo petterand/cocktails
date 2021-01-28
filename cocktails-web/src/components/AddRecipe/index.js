@@ -96,12 +96,16 @@ const AddRecipeWrapper = styled.div`
    color: ${(props) => (props.contentEditable ? '#000' : 'var(--placeholder)')};
    border: 1px solid #e0e0e0;
    border-radius: 4px;
-   margin-top: 16px;
    padding: 16px;
 
    display: flex;
    flex-direction: column;
    ${(props) => props.expanded && expandedStyle}
+
+   @media screen and (min-width: 540px) {
+      max-width: 500px;
+      margin: 0 auto;
+   }
 `;
 
 export default AddRecipe;

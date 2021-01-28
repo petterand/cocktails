@@ -39,6 +39,7 @@ module.exports = {
    mode: 'development',
    devServer: {
       hot: true,
+      disableHostCheck: true,
    },
    resolve: {
       extensions: ['.ts', '.js'],
