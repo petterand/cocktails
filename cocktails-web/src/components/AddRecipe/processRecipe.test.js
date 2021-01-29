@@ -20,15 +20,19 @@ describe('processRecipe', () => {
 });
 
 describe('convertAmounts', () => {
-   it('converts cl to ml', () => {
-      const ingredients = ['3cl vodka', '3cl kaffelikör', '3cl söt vermouth'];
+   it.only('converts cl to ml', () => {
+      const ingredients = [
+         '3cl vodka',
+         '3 cl kaffelikör',
+         '2,5cl söt vermouth',
+      ];
 
       const result = ingredients.map(convertAmount);
 
       expect(result).toEqual([
          '30ml vodka',
          '30ml kaffelikör',
-         '30ml söt vermouth',
+         '25ml söt vermouth',
       ]);
    });
 

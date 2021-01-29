@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Header from '../Header';
 import AddRecipe from '../AddRecipe';
 import RecipeList from '../RecipeList';
+import RecipeDetails from '../RecipeDetails';
 import { filterRecipes, buildFilterObject } from '../../common/filters';
 import { hasKey } from '../../common/auth';
 import { useRecipeContext } from '../../contextProviders/recipeContext';
@@ -13,7 +14,7 @@ const ContentWrapper = styled.div`
 `;
 
 const Cocktails = () => {
-   const { recipes, addRecipe } = useRecipeContext();
+   const { recipes, addRecipe, deepLinkedRecipe } = useRecipeContext();
    const [filters, setFilters] = useState([]);
    const [filterValues, setFilterValues] = useState({});
 
@@ -37,6 +38,7 @@ const Cocktails = () => {
             {hasKey() && <AddRecipe addRecipe={addRecipe} />}
             <RecipeList recipes={recipes.filter(filterRecipes(filters))} />
          </ContentWrapper>
+         <RecipeDetails recipe={deepLinkedRecipe} />
       </>
    );
 };

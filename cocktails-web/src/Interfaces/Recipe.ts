@@ -1,5 +1,6 @@
 interface Recipe {
-   name:string,
-   ingredients: Array<string>,
-   description?: string
+   name: string;
+   ingredients: Array<string>;
+   description?: string;
+   id: string;
 }

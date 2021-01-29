@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import anime from 'animejs/lib/anime.es.js';
 import edit from '../../../images/edit.svg';
 import remove from '../../../images/remove.svg';
+import share from '../../../images/share_white.svg';
 import { hasKey } from '../../common/auth';
 import { RecipeContent, Card, BackMenu, Icon } from './styles';
 import { useModalContext } from '../../contextProviders/modalContext';
@@ -23,9 +24,11 @@ const RecipeCard = (props) => {
       });
 
    useEffect(() => {
-      if (hasKey() && props.recipeIndex === 0) {
+      const hasHinted = localStorage.getItem('menu-hint');
+      if (!hasHinted && hasKey() && props.recipeIndex === 0) {
          setTimeout(() => animate(-25, 700), 1000);
          setTimeout(() => animate(0), 2500);
+         localStorage.setItem('menu-hint', true);
       }
    }, []);
 
@@ -101,7 +104,12 @@ const RecipeCard = (props) => {
          </RecipeContent>
          <BackMenu>
             <div>
-               <Icon width="26px" height="26px" src={edit} />
+               <a href={`#${props.recipe.urlId}`}>
+                  <Icon width="26px" height="26px" src={share} />
+               </a>
+               <div>
+                  <Icon width="26px" height="26px" src={edit} />
+               </div>
                <div onClick={onRemove(props.recipe.id)}>
                   <Icon width="26px" height="26px" src={remove} />
                </div>

@@ -25,7 +25,7 @@ const RecipeList = (props) => {
          <Suspense fallback={<SuspenseFallback />}>
             <CascadingGrid noCols={noCols}>
                {props.recipes.map((recipe, i) => (
-                  <RecipeCard key={i} recipeIndex={i} recipe={recipe} />
+                  <RecipeCard key={recipe.id} recipeIndex={i} recipe={recipe} />
                ))}
             </CascadingGrid>
          </Suspense>

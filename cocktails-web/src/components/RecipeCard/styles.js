@@ -46,11 +46,6 @@ export const BackMenu = styled.div`
       justify-content: flex-end;
       > div {
          margin-top: 12px;
-         > img {
-            &:hover {
-               border: 1px solid white;
-            }
-         }
       }
    }
 `;
