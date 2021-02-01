@@ -3,11 +3,9 @@
    "name": "cocktails",
    "private": true,
    "scripts": {
-      "build": "cd cocktails-web && webpack",
-      "bundle": "cd cocktails-web && webpack --mode development",
-      "start": "cd cocktails-web && webpack-dev-server --open --mode development",
-      "start:server": "node cocktails-server/src/index.js",
-      "test:web": "cd cocktails-web && jest --watchAll"
+      "build": "cd cocktails-web && webpack -c webpack.prod.config.js",
+      "start": "cd cocktails-web && webpack serve",
+      "test": "cd cocktails-web && jest --watchAll"
    },
    "keywords": [],
    "author": "",

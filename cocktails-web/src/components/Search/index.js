@@ -1,14 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
 import anime from 'animejs/lib/anime.es.js';
-import { toArray } from '../../common';
 import { getSearchResultList } from '../../common/filters';
-import { SearchResultContainer, ClickInterceptor } from '../../common/styles';
+import {
+   SearchResultContainer,
+   ClickInterceptor,
+   SearchInputWrapper,
+   ClearSearch,
+} from '../../common/styles';
 import { SearchWrapper, SearchInput, SearchResultItem } from './styles';
+import ConditionalRender from '../ConditionalRender';
 
 const Search = (props) => {
    const [result, setResult] = useState([]);
    const [searchResultOpen, setSearchResultOpen] = useState(false);
    const [selectedIndex, setSelectedIndex] = useState(-1);
+   const [showClear, setShowClear] = useState(false);
    const inputRef = useRef(null);
 
    const searchForValue = (val) => {
@@ -16,6 +22,12 @@ const Search = (props) => {
       inputRef.current.value = val;
       props.onSearch(val);
    };
+
+   useEffect(() => {
+      if (props.shouldReset) {
+         clearSearch();
+      }
+   }, [props.shouldReset]);
 
    useEffect(() => {
       if (result.length > 0) {
@@ -60,22 +72,39 @@ const Search = (props) => {
             return;
       }
 
-      if (searchValue.length > 2) {
+      if (searchValue.length > 0) {
+         setShowClear(true);
+      } else if (searchValue.length > 2) {
          setResult(getSearchResultList(props.filterValues, searchValue));
       } else if (searchValue.length === 0) {
          setResult([]);
+         setShowClear(false);
          props.toggle('', true);
       }
    };
 
+   const clearSearch = () => {
+      inputRef.current.value = '';
+      setResult([]);
+      setSelectedIndex(-1);
+      setShowClear(false);
+      props.onSearch([]);
+      console.log('as');
+   };
+
    return (
       <SearchWrapper>
-         <SearchInput
-            type="text"
-            placeholder="Sök"
-            onKeyUp={onKeyUp}
-            ref={inputRef}
-         />
+         <SearchInputWrapper>
+            <SearchInput
+               type="text"
+               placeholder="Sök"
+               onKeyUp={onKeyUp}
+               ref={inputRef}
+            />
+            <ConditionalRender predicate={showClear}>
+               <ClearSearch onClick={clearSearch}>&times;</ClearSearch>
+            </ConditionalRender>
+         </SearchInputWrapper>
          {searchResultOpen && (
             <>
                <ClickInterceptor

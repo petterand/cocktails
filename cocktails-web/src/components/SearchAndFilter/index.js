@@ -32,6 +32,7 @@ const SearchAndFilter = (props) => {
                searchValue={searchValue}
                toggle={toggle}
                onSearch={onSearch}
+               shouldReset={props.shouldReset}
             />
          )}
          {showFilter && (
@@ -41,6 +42,7 @@ const SearchAndFilter = (props) => {
                onFilter={onFilter}
                keepFocus={keepFocus}
                menuVisible={props.menuVisible}
+               shouldReset={props.shouldReset}
             />
          )}
       </>

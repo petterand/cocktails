@@ -50,6 +50,18 @@ export const SearchInput = styled.input`
    }
 `;
 
+export const SearchInputWrapper = styled.div`
+   display: flex;
+   width: 100%;
+   align-items: center;
+`;
+
+export const ClearSearch = styled.span`
+   font-size: 26px;
+   cursor: pointer;
+   margin-left: auto;
+`;
+
 export const Input = styled.input`
    border: 1px solid var(--battleship-grey);
    font-size: 16px;

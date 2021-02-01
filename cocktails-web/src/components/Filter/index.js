@@ -5,6 +5,7 @@ import {
    SearchResultContainer,
    ClickInterceptor,
    SearchInput,
+   ClearSearch,
 } from '../../common/styles';
 import { FilterItem, SelectedFilters, BadgeList, BadgeItem } from './styles';
 import Checkbox from '../Checkbox';
@@ -39,6 +40,12 @@ const Filter = (props) => {
          setFiltersOpen((s) => !s);
       }
    };
+
+   useEffect(() => {
+      if (props.shouldReset) {
+         clearFilters();
+      }
+   }, [props.shouldReset]);
 
    useEffect(() => {
       if (props.keepFocus) {
@@ -77,6 +84,17 @@ const Filter = (props) => {
       }
    }, [filtersOpen]);
 
+   const clearFilters = () => {
+      const noSelectedFilters = filters.map((f) => ({ ...f, checked: false }));
+      setFilters(noSelectedFilters);
+      setFiltersOpen(false);
+   };
+
+   const onClearFilters = (e) => {
+      e.stopPropagation();
+      clearFilters();
+   };
+
    return (
       <div style={{ position: 'relative' }}>
          {filtersOpen && <ClickInterceptor onClick={toggleList} />}
@@ -85,7 +103,10 @@ const Filter = (props) => {
             onClick={toggleList}
          >
             {selectedFilters.length > 0 ? (
-               <FilterBadges filters={selectedFilters} />
+               <>
+                  <FilterBadges filters={selectedFilters} />
+                  <ClearSearch onClick={onClearFilters}>&times;</ClearSearch>
+               </>
             ) : (
                <SearchInput
                   ref={inputRef}
@@ -98,7 +119,11 @@ const Filter = (props) => {
          <SearchResultContainer open={filtersOpen} ref={resultRef}>
             {filters.map((f, i) => (
                <FilterItem key={i}>
-                  <Checkbox label={f.value} onChange={onCheckboxClick(f)} />
+                  <Checkbox
+                     label={f.value}
+                     onChange={onCheckboxClick(f)}
+                     checked={f.checked}
+                  />
                </FilterItem>
             ))}
          </SearchResultContainer>

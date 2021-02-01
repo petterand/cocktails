@@ -109,6 +109,9 @@ const MenuItem = styled.div`
    width: 32px;
    height: 32px;
    cursor: pointer;
+   &:not(:last-child) {
+      margin-right: 16px;
+   }
 `;
 
 const HeaderWrapper = styled.div`
@@ -142,7 +145,9 @@ const HeaderElement = styled.div`
 
    @media screen and (min-width: 540px) {
       position: static;
-      width: 80%;
+      border-bottom: 1px solid var(--aero-blue);
+      width: 100%;
+      padding-right: 32px;
    }
 `;
 
