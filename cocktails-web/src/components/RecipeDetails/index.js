@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import ConditionalRender from '../ConditionalRender';
 
 const Wrapper = styled.div`
-   position: absolute;
+   position: fixed;
    top: 16px;
    bottom: 16px;
    left: 16px;

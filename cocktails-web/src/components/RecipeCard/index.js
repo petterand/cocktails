@@ -45,31 +45,6 @@ const RecipeCard = (props) => {
       }
    };
 
-   const touchStart = (e) => {
-      e.target.dataset.x =
-         Number(e.touches[0].pageX) + Number(e.target.dataset.move || 0);
-   };
-   const touchMove = (e) => {
-      let moveX = Number(e.target.dataset.x) - e.touches[0].pageX;
-      if (moveX > 50) {
-         moveX = 50;
-      }
-      if (moveX < 0) {
-         moveX = 0;
-      }
-      e.target.dataset.move = moveX;
-      animate(-Number(e.target.dataset.move));
-   };
-   const touchEnd = (e) => {
-      if (e.target.dataset.move > 50) {
-         e.target.dataset.move = 50;
-      } else if (e.target.dataset.move < -50) {
-         e.target.dataset.move = -50;
-      } else {
-         e.target.dataset.move = 0;
-      }
-   };
-
    const setHandler = (handler) => (hasKey() ? handler : noop);
 
    const onRemove = (id) => async () => {
@@ -85,16 +60,22 @@ const RecipeCard = (props) => {
       });
    };
 
+   const onShare = async () => {
+      console.log('SHARE');
+      const url = `${window.location.origin}/#${props.recipe.urlId}`;
+      await navigator.clipboard.writeText(url);
+      console.log('written to clipboard');
+   };
+
+   const openDetails = (e) => {
+      e.stopPropagation();
+      window.location.hash = `#${props.recipe.urlId}`;
+   };
+
    return (
       <Card>
-         <RecipeContent
-            onClick={setHandler(onClick)}
-            onTouchStart={setHandler(touchStart)}
-            onTouchMove={setHandler(touchMove)}
-            onTouchEnd={setHandler(touchEnd)}
-            ref={containerRef}
-         >
-            <p>{props.recipe.name}</p>
+         <RecipeContent onClick={setHandler(onClick)} ref={containerRef}>
+            <p onClick={openDetails}>{props.recipe.name}</p>
             <ul>
                {props.recipe.ingredients.map((ingredient, i) => (
                   <li key={i}>{ingredient}</li>
@@ -104,9 +85,9 @@ const RecipeCard = (props) => {
          </RecipeContent>
          <BackMenu>
             <div>
-               <a href={`#${props.recipe.urlId}`}>
+               <div onClick={onShare}>
                   <Icon width="26px" height="26px" src={share} />
-               </a>
+               </div>
                <div>
                   <Icon width="26px" height="26px" src={edit} />
                </div>
