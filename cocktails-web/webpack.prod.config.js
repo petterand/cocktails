@@ -35,58 +35,89 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
    return loaders;
 };
 
-module.exports = {
-   mode: 'production',
-   resolve: {
-      extensions: ['.ts', '.js'],
-   },
-   module: {
-      rules: [
-         {
-            test: /\.(js|ts)/,
-            include: path.resolve(__dirname, 'src'),
-            exclude: /node_modules|build|dist/,
-            use: {
-               loader: 'babel-loader',
+module.exports = [
+   {
+      mode: 'production',
+      output: {
+         path: path.resolve(__dirname, 'dist'),
+         filename: '[name].[contenthash].js',
+      },
+      optimization: {
+         splitChunks: {
+            chunks: 'all',
+            cacheGroups: {
+               vendor: {
+                  test: /[\\/]node_modules[\\/]/,
+                  name(module) {
+                     // get the name. E.g. node_modules/packageName/not/this/part.js
+                     // or node_modules/packageName
+                     const packageName = module.context.match(
+                        /[\\/]node_modules[\\/](.*?)([\\/]|$)/
+                     )[1];
+
+                     // npm package names are URL-safe, but some servers don't like @ symbols
+                     return `npm.${packageName.replace('@', '')}`;
+                  },
+               },
             },
          },
-         {
-            test: cssRegex,
-            exclude: cssModuleRegex,
-            use: getStyleLoaders({
-               importLoaders: 1,
-            }),
-         },
-         {
-            test: cssModuleRegex,
-            use: getStyleLoaders({
-               importLoaders: 1,
-               modules: true,
-               localIdentName: '[path][name]__[local]--[hash:base64:5]',
-            }),
-         },
-         {
-            test: lessRegex,
-            use: getStyleLoaders({ importLoaders: 2 }, 'less-loader'),
-         },
-         {
-            test: /\.svg$/,
-            type: 'asset/inline',
-         },
+      },
+      resolve: {
+         extensions: ['.ts', '.js'],
+      },
+      module: {
+         rules: [
+            {
+               test: /\.(js|ts)/,
+               include: path.resolve(__dirname, 'src'),
+               exclude: /node_modules|build|dist/,
+               use: {
+                  loader: 'babel-loader',
+               },
+            },
+            {
+               test: cssRegex,
+               exclude: cssModuleRegex,
+               use: getStyleLoaders({
+                  importLoaders: 1,
+               }),
+            },
+            {
+               test: cssModuleRegex,
+               use: getStyleLoaders({
+                  importLoaders: 1,
+                  modules: true,
+                  localIdentName: '[path][name]__[local]--[hash:base64:5]',
+               }),
+            },
+            {
+               test: lessRegex,
+               use: getStyleLoaders({ importLoaders: 2 }, 'less-loader'),
+            },
+            {
+               test: /\.svg$/,
+               type: 'asset/inline',
+            },
+         ],
+      },
+      plugins: [
+         new HtmlWebPackPlugin({
+            template: './public/index.html',
+            filename: './index.html',
+            favicon: './public/favicon.png',
+         }),
+         new CopyPlugin({
+            patterns: [{ from: './public/favicon.png' }],
+         }),
+         new webpack.DefinePlugin(envKeys),
       ],
    },
-   plugins: [
-      new HtmlWebPackPlugin({
-         template: './public/index.html',
-         filename: './index.html',
-         favicon: './public/favicon.png',
-      }),
-      new CopyPlugin({
-         patterns: [
-            { from: './public/sw.js' },
-            { from: './public/favicon.png' },
-         ],
-      }),
-      new webpack.DefinePlugin(envKeys),
-   ],
-};
+   {
+      entry: path.resolve(__dirname, 'public/sw.js'),
+      output: {
+         filename: 'sw.js',
+         path: path.resolve(__dirname, 'dist'),
+      },
+      plugins: [new webpack.DefinePlugin(envKeys)],
+   },
+];

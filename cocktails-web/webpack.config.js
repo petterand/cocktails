@@ -35,63 +35,70 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
    return loaders;
 };
 
-module.exports = {
-   mode: 'development',
-   devServer: {
-      hot: true,
-      disableHostCheck: true,
-   },
-   resolve: {
-      extensions: ['.ts', '.js'],
-   },
-   module: {
-      rules: [
-         {
-            test: /\.(js|ts)/,
-            include: path.resolve(__dirname, 'src'),
-            exclude: /node_modules|build|dist/,
-            use: {
-               loader: 'babel-loader',
+module.exports = [
+   {
+      mode: 'development',
+      devServer: {
+         hot: true,
+         disableHostCheck: true,
+      },
+      resolve: {
+         extensions: ['.ts', '.js'],
+      },
+      module: {
+         rules: [
+            {
+               test: /\.(js|ts)/,
+               include: path.resolve(__dirname, 'src'),
+               exclude: /node_modules|build|dist/,
+               use: {
+                  loader: 'babel-loader',
+               },
             },
-         },
-         {
-            test: cssRegex,
-            exclude: cssModuleRegex,
-            use: getStyleLoaders({
-               importLoaders: 1,
-            }),
-         },
-         {
-            test: cssModuleRegex,
-            use: getStyleLoaders({
-               importLoaders: 1,
-               modules: true,
-               localIdentName: '[path][name]__[local]--[hash:base64:5]',
-            }),
-         },
-         {
-            test: lessRegex,
-            use: getStyleLoaders({ importLoaders: 2 }, 'less-loader'),
-         },
-         {
-            test: /\.svg$/,
-            type: 'asset/inline',
-         },
+            {
+               test: cssRegex,
+               exclude: cssModuleRegex,
+               use: getStyleLoaders({
+                  importLoaders: 1,
+               }),
+            },
+            {
+               test: cssModuleRegex,
+               use: getStyleLoaders({
+                  importLoaders: 1,
+                  modules: true,
+                  localIdentName: '[path][name]__[local]--[hash:base64:5]',
+               }),
+            },
+            {
+               test: lessRegex,
+               use: getStyleLoaders({ importLoaders: 2 }, 'less-loader'),
+            },
+            {
+               test: /\.svg$/,
+               type: 'asset/inline',
+            },
+         ],
+      },
+      plugins: [
+         new HtmlWebPackPlugin({
+            template: './public/index.html',
+            filename: './index.html',
+            favicon: './public/favicon.png',
+         }),
+         new CopyPlugin({
+            patterns: [{ from: './public/favicon.png' }],
+         }),
+         new webpack.DefinePlugin(envKeys),
+         new webpack.HotModuleReplacementPlugin(),
       ],
    },
-   plugins: [
-      new HtmlWebPackPlugin({
-         template: './public/index.html',
-         filename: './index.html',
-         favicon: './public/favicon.png',
-      }),
-      new CopyPlugin({
-         patterns: [
-            { from: './public/sw.js' },
-            { from: './public/favicon.png' },
-         ],
-      }),
-      new webpack.DefinePlugin(envKeys),
-      new webpack.HotModuleReplacementPlugin(),
-   ],
-};
+   {
+      entry: path.resolve(__dirname, 'public/sw.js'),
+      output: {
+         filename: 'sw.js',
+         path: path.resolve(__dirname, 'dist'),
+      },
+      plugins: [new webpack.DefinePlugin(envKeys)],
+   },
+];

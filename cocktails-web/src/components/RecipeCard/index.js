@@ -86,13 +86,23 @@ const RecipeCard = (props) => {
          <BackMenu>
             <div>
                <div onClick={onShare}>
-                  <Icon width="26px" height="26px" src={share} />
+                  <Icon
+                     alt="Share icon"
+                     width="26px"
+                     height="26px"
+                     src={share}
+                  />
                </div>
                <div>
-                  <Icon width="26px" height="26px" src={edit} />
+                  <Icon alt="Edit icon" width="26px" height="26px" src={edit} />
                </div>
                <div onClick={onRemove(props.recipe.id)}>
-                  <Icon width="26px" height="26px" src={remove} />
+                  <Icon
+                     alt="Remove icon"
+                     width="26px"
+                     height="26px"
+                     src={remove}
+                  />
                </div>
             </div>
          </BackMenu>

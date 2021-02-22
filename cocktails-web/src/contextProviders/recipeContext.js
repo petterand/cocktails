@@ -10,6 +10,13 @@ const RecipeContextProvider = (props) => {
    const [recipes, setRecipes] = useState([]);
    const [deepLinkedRecipe, setDeepLinkedRecipe] = useState(null);
 
+   useEffect(() => {
+      navigator.serviceWorker.onmessage = (event) => {
+         const { data } = JSON.parse(event.data);
+         setRecipes(data);
+      };
+   }, []);
+
    const fetchCocktails = async () => {
       let cocktails = await getCocktails();
       cocktails = cocktails.map((c) => ({
