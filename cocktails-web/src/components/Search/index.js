@@ -100,6 +100,7 @@ const Search = (props) => {
                placeholder="Sök"
                onKeyUp={onKeyUp}
                ref={inputRef}
+               aria-label="Sök"
             />
             <ConditionalRender predicate={showClear}>
                <ClearSearch onClick={clearSearch}>&times;</ClearSearch>

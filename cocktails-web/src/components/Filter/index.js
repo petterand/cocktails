@@ -113,6 +113,7 @@ const Filter = (props) => {
                   placeholder="Sök"
                   onKeyUp={toggleList}
                   onClick={toggleList}
+                  aria-label="Sök"
                />
             )}
          </SelectedFilters>
