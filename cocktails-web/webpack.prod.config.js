@@ -3,6 +3,7 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 const dotenv = require('dotenv');
 const path = require('path');
+const BrotliPlugin = require('brotli-webpack-plugin');
 
 const cssRegex = /\.css$/;
 const cssModuleRegex = /\.module\.css$/;
@@ -110,6 +111,12 @@ module.exports = [
             patterns: [{ from: './public/favicon.png' }],
          }),
          new webpack.DefinePlugin(envKeys),
+         new BrotliPlugin({
+            asset: '[path].br[query]',
+            test: /\.js$|\.html$/,
+            threshold: 10240,
+            minRatio: 0.7,
+         }),
       ],
    },
    {
