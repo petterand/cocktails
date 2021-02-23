@@ -1,4 +1,9 @@
 import styled from 'styled-components';
+
+export const RecipeName = styled.p`
+   cursor: pointer;
+`;
+
 export const RecipeContent = styled.div`
    border: 1px solid #e0e0e0;
    border-left: 3px solid var(--aero-blue);

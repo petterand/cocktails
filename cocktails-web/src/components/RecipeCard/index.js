@@ -4,7 +4,7 @@ import edit from '../../../images/edit.svg';
 import remove from '../../../images/remove.svg';
 import share from '../../../images/share_white.svg';
 import { hasKey } from '../../common/auth';
-import { RecipeContent, Card, BackMenu, Icon } from './styles';
+import { RecipeContent, Card, BackMenu, Icon, RecipeName } from './styles';
 import { useModalContext } from '../../contextProviders/modalContext';
 import { useRecipeContext } from '../../contextProviders/recipeContext';
 import ConfirmModal from '../ConfirmModal';
@@ -75,7 +75,7 @@ const RecipeCard = (props) => {
    return (
       <Card>
          <RecipeContent onClick={setHandler(onClick)} ref={containerRef}>
-            <p onClick={openDetails}>{props.recipe.name}</p>
+            <RecipeName onClick={openDetails}>{props.recipe.name}</RecipeName>
             <ul>
                {props.recipe.ingredients.map((ingredient, i) => (
                   <li key={i}>{ingredient}</li>

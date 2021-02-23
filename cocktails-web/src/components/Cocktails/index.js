@@ -8,6 +8,7 @@ import { filterRecipes, buildFilterObject } from '../../common/filters';
 import { hasKey } from '../../common/auth';
 import { useRecipeContext } from '../../contextProviders/recipeContext';
 import ConditionalRender from '../ConditionalRender';
+import Loading from '../Loading';
 
 const ContentWrapper = styled.div`
    padding: 0 16px;
@@ -30,6 +31,18 @@ const Cocktails = () => {
    const [filters, setFilters] = useState([]);
    const [filterValues, setFilterValues] = useState({});
    const [shouldReset, setShouldReset] = useState(false);
+   const [showLoading, setShowLoading] = useState(false);
+
+   useEffect(() => {
+      const timeout = setTimeout(() => {
+         setShowLoading(true);
+      }, 1000);
+      if (recipes.length > 0) {
+         clearTimeout(timeout);
+         setShowLoading(false);
+      }
+      return () => clearInterval(timeout);
+   }, [recipes]);
 
    useEffect(() => {
       setFilterValues(buildFilterObject(recipes));
@@ -59,7 +72,9 @@ const Cocktails = () => {
          />
          <ContentWrapper>
             {hasKey() && <AddRecipe addRecipe={addRecipe} />}
-            <RecipeList recipes={recipes.filter(filterRecipes(filters))} />
+            <ConditionalRender predicate={!showLoading} fallback={<Loading />}>
+               <RecipeList recipes={recipes.filter(filterRecipes(filters))} />
+            </ConditionalRender>
             <ConditionalRender predicate={filters.length > 0}>
                <ResetFiltersWrapper>
                   <button onClick={resetFilters}>Visa alla</button>

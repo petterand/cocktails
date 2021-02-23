@@ -2,7 +2,7 @@ const ConditionalRender = (props) => {
    if (props.predicate) {
       return props.children;
    } else {
-      return null;
+      return props.fallback || null;
    }
 };
 

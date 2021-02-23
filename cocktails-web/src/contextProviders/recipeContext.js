@@ -6,6 +6,12 @@ const RecipeContext = React.createContext({});
 
 export const useRecipeContext = () => React.useContext(RecipeContext);
 
+const mapCocktails = (cocktails) =>
+   cocktails.map((c) => ({
+      ...c,
+      urlId: getUrlId(c),
+   }));
+
 const RecipeContextProvider = (props) => {
    const [recipes, setRecipes] = useState([]);
    const [deepLinkedRecipe, setDeepLinkedRecipe] = useState(null);
@@ -13,16 +19,14 @@ const RecipeContextProvider = (props) => {
    useEffect(() => {
       navigator.serviceWorker.onmessage = (event) => {
          const { data } = JSON.parse(event.data);
-         setRecipes(data);
+         const cocktails = mapCocktails(data);
+         setRecipes(cocktails);
       };
    }, []);
 
    const fetchCocktails = async () => {
       let cocktails = await getCocktails();
-      cocktails = cocktails.map((c) => ({
-         ...c,
-         urlId: getUrlId(c),
-      }));
+      cocktails = mapCocktails(cocktails);
       setRecipes(cocktails);
    };
 
