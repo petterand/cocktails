@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import useDeviceSize from '../../common/useDeviceSize';
+import Loading from '../Loading';
 import SuspenseFallback from '../SuspenseFallback';
 
 const RecipeListWrapper = styled.div`
@@ -22,7 +23,7 @@ const RecipeList = (props) => {
 
    return (
       <RecipeListWrapper>
-         <Suspense fallback={<SuspenseFallback />}>
+         <Suspense fallback={<Loading />}>
             <CascadingGrid noCols={noCols}>
                {props.recipes.map((recipe, i) => (
                   <RecipeCard key={recipe.id} recipeIndex={i} recipe={recipe} />

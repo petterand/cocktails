@@ -3,16 +3,17 @@ import anime from 'animejs/lib/anime.es.js';
 import edit from '../../../images/edit.svg';
 import remove from '../../../images/remove.svg';
 import share from '../../../images/share_white.svg';
-import { hasKey } from '../../common/auth';
 import { RecipeContent, Card, BackMenu, Icon, RecipeName } from './styles';
 import { useModalContext } from '../../contextProviders/modalContext';
 import { useRecipeContext } from '../../contextProviders/recipeContext';
 import ConfirmModal from '../ConfirmModal';
+import { useUserContext } from '../../contextProviders/userContext';
 
 const RecipeCard = (props) => {
    const containerRef = useRef(null);
    const { openModal } = useModalContext();
    const { removeRecipe } = useRecipeContext();
+   const { isSignedIn } = useUserContext();
 
    const noop = () => {};
 
@@ -25,7 +26,7 @@ const RecipeCard = (props) => {
 
    useEffect(() => {
       const hasHinted = localStorage.getItem('menu-hint');
-      if (!hasHinted && hasKey() && props.recipeIndex === 0) {
+      if (!hasHinted && isSignedIn && props.recipeIndex === 0) {
          setTimeout(() => animate(-25, 700), 1000);
          setTimeout(() => animate(0), 2500);
          localStorage.setItem('menu-hint', true);
@@ -36,16 +37,14 @@ const RecipeCard = (props) => {
       containerRef.current.style.transform.includes('-50px');
 
    const onClick = () => {
-      if (hasKey()) {
-         if (!isMenuOpen()) {
-            animate(-50);
-         } else {
-            animate(0);
-         }
+      if (!isMenuOpen()) {
+         animate(-50);
+      } else {
+         animate(0);
       }
    };
 
-   const setHandler = (handler) => (hasKey() ? handler : noop);
+   const setHandler = (handler) => (isSignedIn ? handler : noop);
 
    const onRemove = (id) => async () => {
       const remove = async () => {
@@ -61,7 +60,6 @@ const RecipeCard = (props) => {
    };
 
    const onShare = async () => {
-      console.log('SHARE');
       const url = `${window.location.origin}/#${props.recipe.urlId}`;
       await navigator.clipboard.writeText(url);
       console.log('written to clipboard');
@@ -69,7 +67,9 @@ const RecipeCard = (props) => {
 
    const openDetails = (e) => {
       e.stopPropagation();
-      window.location.hash = `#${props.recipe.urlId}`;
+      if (!isMenuOpen()) {
+         window.location.hash = `#${props.recipe.urlId}`;
+      }
    };
 
    return (

@@ -3,11 +3,13 @@ import styled from 'styled-components';
 import anime from 'animejs/lib/anime.es.js';
 import SearchAndFilter from '../SearchAndFilter';
 import signinIcon from '../../../images/signin.svg';
+import signoutIcon from '../../../images/signout.svg';
 import randomIcon from '../../../images/random.svg';
 import { useModalContext } from '../../contextProviders/modalContext';
 import SignInModalBody from '../SignInModal';
-import { hasKey } from '../../common/auth';
 import useDeviceSize from '../../common/useDeviceSize';
+import { useUserContext } from '../../contextProviders/userContext';
+import ConditionalRender from '../ConditionalRender';
 
 const Header = (props) => {
    const headerRef = useRef(null);
@@ -76,6 +78,8 @@ const Header = (props) => {
 
 const Menu = (props) => {
    const { openModal } = useModalContext();
+   const { isSignedIn, signOut } = useUserContext();
+
    const signIn = (e) => {
       e.stopPropagation();
       openModal({ body: <SignInModalBody /> });
@@ -86,13 +90,23 @@ const Menu = (props) => {
       props.onRandomize();
    };
 
+   const SignIn = () => (
+      <MenuItem onClick={signIn}>
+         <img src={signinIcon} alt="sign in" width="32px" height="32px" />
+      </MenuItem>
+   );
+
+   const SignOut = () => (
+      <MenuItem onClick={signOut}>
+         <img src={signoutIcon} alt="sign out" width="40px" height="32px" />
+      </MenuItem>
+   );
+
    return (
       <HeaderMenu onClick={props.onClick}>
-         {!hasKey() && (
-            <MenuItem onClick={signIn}>
-               <img src={signinIcon} alt="sign in" width="32px" height="32px" />
-            </MenuItem>
-         )}
+         <ConditionalRender predicate={isSignedIn} fallback={<SignIn />}>
+            <SignOut />
+         </ConditionalRender>
          <MenuItem onClick={randomize}>
             <img
                src={randomIcon}

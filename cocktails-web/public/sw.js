@@ -44,7 +44,10 @@ self.addEventListener('install', function (event) {
 });
 
 self.addEventListener('fetch', function (event) {
-   if (event.request.url.includes(API_URL)) {
+   if (
+      event.request.url.includes(API_URL) &&
+      !event.request.url.includes('get-key')
+   ) {
       event.respondWith(caches.match(event.request));
       event.waitUntil(update(event.request).then(refresh));
    }

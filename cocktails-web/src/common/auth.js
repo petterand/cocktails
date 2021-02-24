@@ -10,5 +10,7 @@ export const getAndSetKey = async (credentials) => {
    if (key) {
       localStorage.setItem('api-key', key);
       localStorage.setItem('api-credentials', btoa(credentials));
+      return true;
    }
+   return false;
 };
