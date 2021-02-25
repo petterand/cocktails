@@ -26,7 +26,7 @@ const ResetFiltersWrapper = styled.div`
 `;
 
 const Cocktails = () => {
-   const { recipes, addRecipe, deepLinkedRecipe } = useRecipeContext();
+   const { recipes, deepLinkedRecipe } = useRecipeContext();
    const { isSignedIn } = useUserContext();
    const [filters, setFilters] = useState([]);
    const [filterValues, setFilterValues] = useState({});
@@ -59,7 +59,7 @@ const Cocktails = () => {
             shouldReset={shouldReset}
          />
          <ContentWrapper>
-            {isSignedIn && <AddRecipe addRecipe={addRecipe} />}
+            {isSignedIn && <AddRecipe />}
             <RecipeList recipes={recipes.filter(filterRecipes(filters))} />
             <ConditionalRender predicate={filters.length > 0}>
                <ResetFiltersWrapper>

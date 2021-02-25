@@ -17,10 +17,8 @@ const ModalWrapper = styled.div`
 
 const ModalContent = styled.div`
    background-color: #fff;
-   width: 75%;
    padding: 48px 16px 16px;
    position: relative;
-   max-width: 320px;
    > span {
       font-size: 32px;
       display: block;

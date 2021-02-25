@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { getCocktails, addCocktail, deleteCocktail } from '../common/api';
+import {
+   getCocktails,
+   addCocktail,
+   deleteCocktail,
+   updateCocktail,
+} from '../common/api';
 import getUrlId from '../common/getUrlId';
 
 const RecipeContext = React.createContext({});
@@ -36,6 +41,15 @@ const RecipeContextProvider = (props) => {
          fetchCocktails();
       } catch (e) {
          console.error('Failed to add cocktail', e);
+      }
+   };
+
+   const updateRecipe = async (recipe) => {
+      try {
+         await updateCocktail(recipe);
+         fetchCocktails();
+      } catch (e) {
+         console.error('Failed to update cocktail', e);
       }
    };
 
@@ -76,7 +90,13 @@ const RecipeContextProvider = (props) => {
 
    return (
       <RecipeContext.Provider
-         value={{ recipes, deepLinkedRecipe, addRecipe, removeRecipe }}
+         value={{
+            recipes,
+            deepLinkedRecipe,
+            addRecipe,
+            removeRecipe,
+            updateRecipe,
+         }}
       >
          {props.children}
       </RecipeContext.Provider>

@@ -6,11 +6,11 @@ import UserContextProvider from './contextProviders/userContext';
 const App = () => {
    return (
       <UserContextProvider>
-         <ModalContextProvider>
-            <RecipeContextProvider>
+         <RecipeContextProvider>
+            <ModalContextProvider>
                <Cocktails />
-            </RecipeContextProvider>
-         </ModalContextProvider>
+            </ModalContextProvider>
+         </RecipeContextProvider>
       </UserContextProvider>
    );
 };

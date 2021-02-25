@@ -8,13 +8,15 @@ export const RecipeContent = styled.div`
    border: 1px solid #e0e0e0;
    border-left: 3px solid var(--aero-blue);
    padding: 16px;
-   margin-bottom: 16px;
    background-color: white;
    z-index: 2;
    position: relative;
+   width: 100%;
 
    > div {
-      white-space: pre-line;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
    }
    > p:first-child {
       font-weight: bold;
@@ -22,7 +24,7 @@ export const RecipeContent = styled.div`
       font-size: 1.1rem;
       text-transform: capitalize;
    }
-   > ul {
+   ul {
       margin: 16px 0 8px 0;
       list-style-type: none;
       padding: 0;
@@ -31,6 +33,7 @@ export const RecipeContent = styled.div`
 
 export const Card = styled.div`
    position: relative;
+   margin-bottom: 16px;
 `;
 
 export const BackMenu = styled.div`

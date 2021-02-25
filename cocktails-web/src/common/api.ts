@@ -10,7 +10,7 @@ function getConfig() {
 
    const headers = {
       'x-api-key': key,
-      Authorization: `Basic ${credentials}`,
+      authorization: `Basic ${credentials}`,
       'Content-Type': 'application/json',
    };
 
@@ -25,31 +25,31 @@ async function getCocktails() {
 async function getKey(credentials: string) {
    const res = await axios.get(`${apiUrl}/cocktails/get-key`, {
       headers: {
-         Authorization: `Basic ${btoa(credentials)}`,
+         athorization: `Basic ${btoa(credentials)}`,
       },
    });
    return res.data;
 }
 
 async function addCocktail(cocktail: Recipe) {
-   const credentials = localStorage.getItem('api-credentials');
-   const key = localStorage.getItem('api-key');
-   if (credentials && key) {
-      const headers = {
-         'x-api-key': key,
-         Authorization: `Basic ${credentials}`,
-         'Content-Type': 'application/json',
-      };
-
+   const { isValid, headers } = getConfig();
+   if (isValid) {
       await axios.post(`${apiUrl}/cocktails`, cocktail, { headers });
    }
 }
 
 async function deleteCocktail(id: String) {
-   const { key, credentials, isValid, headers } = getConfig();
+   const { isValid, headers } = getConfig();
    if (isValid) {
       await axios.delete(`${apiUrl}/cocktails/${id}`, { headers });
    }
 }
 
-export { getCocktails, getKey, addCocktail, deleteCocktail };
+async function updateCocktail(cocktail: Recipe) {
+   const { isValid, headers } = getConfig();
+   if (isValid) {
+      await axios.put(`${apiUrl}/cocktails`, cocktail, { headers });
+   }
+}
+
+export { getCocktails, getKey, addCocktail, deleteCocktail, updateCocktail };

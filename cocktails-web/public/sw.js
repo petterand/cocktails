@@ -45,6 +45,7 @@ self.addEventListener('install', function (event) {
 
 self.addEventListener('fetch', function (event) {
    if (
+      event.request.method === 'GET' &&
       event.request.url.includes(API_URL) &&
       !event.request.url.includes('get-key')
    ) {

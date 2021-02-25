@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
+import processRecipe from '../../common/processRecipe';
+import { useRecipeContext } from '../../contextProviders/recipeContext';
 import Button from '../Button';
-
-import processRecipe from './processRecipe';
 
 const Tools = (props) => {
    return (
@@ -12,10 +12,11 @@ const Tools = (props) => {
    );
 };
 
-const AddRecipe = ({ addRecipe }) => {
+const AddRecipe = () => {
    const addRef = useRef(null);
    const [expanded, setExpanded] = useState(false);
    const [dirty, setDirty] = useState(false);
+   const { addRecipe } = useRecipeContext();
 
    useEffect(() => {
       const el = addRef.current;
@@ -24,14 +25,14 @@ const AddRecipe = ({ addRecipe }) => {
       }
    }, [expanded]);
 
-   const saveRecipe = (e) => {
+   const saveRecipe = async (e) => {
       e.stopPropagation();
       const el = addRef.current;
       const recipe = el.value;
 
       if (recipe) {
          try {
-            addRecipe(processRecipe(recipe));
+            await addRecipe(processRecipe(recipe));
             setExpanded(false);
          } catch (e) {
             console.error(e);
@@ -78,14 +79,6 @@ const AddRecipeTextBox = styled.textarea`
    margin-bottom: ${(props) => (props.expanded ? '8px' : '')};
    font-family: 'Ubuntu', sans-serif;
    font-size: 16px;
-`;
-
-const AddRecipeContent = styled.div`
-   outline: none;
-   flex: 1;
-   &:before {
-      ${(props) => props.contentEditable || 'content: "Lägg till recept"'};
-   }
 `;
 
 const expandedStyle = css`

@@ -8,6 +8,7 @@ import { useModalContext } from '../../contextProviders/modalContext';
 import { useRecipeContext } from '../../contextProviders/recipeContext';
 import ConfirmModal from '../ConfirmModal';
 import { useUserContext } from '../../contextProviders/userContext';
+import EditModal from '../EditModal';
 
 const RecipeCard = (props) => {
    const containerRef = useRef(null);
@@ -72,6 +73,12 @@ const RecipeCard = (props) => {
       }
    };
 
+   const openEditModal = () => {
+      openModal({
+         body: <EditModal value={props.recipe} />,
+      });
+   };
+
    return (
       <Card>
          <RecipeContent onClick={setHandler(onClick)} ref={containerRef}>
@@ -93,7 +100,7 @@ const RecipeCard = (props) => {
                      src={share}
                   />
                </div>
-               <div>
+               <div onClick={openEditModal}>
                   <Icon alt="Edit icon" width="26px" height="26px" src={edit} />
                </div>
                <div onClick={onRemove(props.recipe.id)}>

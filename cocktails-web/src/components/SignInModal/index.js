@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useModalContext } from '../../contextProviders/modalContext';
 import { Button, Input } from '../../common/styles';
-import { getAndSetKey } from '../../common/auth';
 import { useUserContext } from '../../contextProviders/userContext';
 
 const Wrapper = styled.div`
