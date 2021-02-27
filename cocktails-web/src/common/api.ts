@@ -25,7 +25,7 @@ async function getCocktails() {
 async function getKey(credentials: string) {
    const res = await axios.get(`${apiUrl}/cocktails/get-key`, {
       headers: {
-         athorization: `Basic ${btoa(credentials)}`,
+         authorization: `Basic ${btoa(credentials)}`,
       },
    });
    return res.data;
