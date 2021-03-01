@@ -1,11 +1,13 @@
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useModalContext } from '../../contextProviders/modalContext';
-import { Button, Input } from '../../common/styles';
+import { Input } from '../../common/styles';
 import { useUserContext } from '../../contextProviders/userContext';
+import Button from '../Button';
 
 const Wrapper = styled.div`
    padding: 0 16px;
+   width: calc(90vw - 32px);
    h3 {
       margin-bottom: 16px;
    }
@@ -23,12 +25,16 @@ const Wrapper = styled.div`
          margin-left: auto;
       }
    }
+   @media screen and (min-width: 540px) {
+      max-width: 300px;
+   }
 `;
 
 const SignInModalBody = () => {
    const { closeModal } = useModalContext();
    const { signIn } = useUserContext();
    const [error, setError] = useState(null);
+   const [busy, setBusy] = useState(false);
    const userRef = useRef(null);
    const passwordRef = useRef(null);
 
@@ -47,7 +53,9 @@ const SignInModalBody = () => {
          const password = passwordRef.current.value;
 
          if (username && password) {
+            setBusy(true);
             await signIn(`${username}:${password}`);
+            setBusy(false);
             closeModal();
          } else {
             setError('Du måste ange både användarnamn och lösenord');
@@ -83,7 +91,9 @@ const SignInModalBody = () => {
                onChange={onInputChange}
             />
             <div>
-               <Button type="submit">Logga in</Button>
+               <Button type="submit" busy={busy}>
+                  Logga in
+               </Button>
             </div>
          </form>
       </Wrapper>

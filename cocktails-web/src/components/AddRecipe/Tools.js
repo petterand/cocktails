@@ -27,7 +27,9 @@ const Tools = (props) => {
             onChange={props.onChangeServingStyle}
             value={props.selectedServingStyle}
          />
-         <Button onClick={props.saveRecipe}>Spara</Button>
+         <Button onClick={props.saveRecipe} busy={props.buttonBusy}>
+            Spara
+         </Button>
       </ToolsWrapper>
    );
 };

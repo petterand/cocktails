@@ -25,6 +25,10 @@ const Wrapper = styled.div`
    display: flex;
    flex-direction: column;
    width: calc(90vw - 32px);
+
+   @media screen and (min-width: 540px) {
+      max-width: 700px;
+   }
 `;
 
 const ButtonWrapper = styled.div`
@@ -46,6 +50,7 @@ const EditModal = (props) => {
    const inputRef = useRef(null);
    const [preparation, setPreparation] = useState(null);
    const [servingStyle, setServingStyle] = useState(null);
+   const [busy, setBusy] = useState(false);
    const { updateRecipe } = useRecipeContext();
    const { closeModal } = useModalContext();
 
@@ -62,10 +67,12 @@ const EditModal = (props) => {
             servingStyle,
             ...processRecipe(inputRef.current.value),
          };
-
+         setBusy(true);
          await updateRecipe(recipe);
+         setBusy(false);
          closeModal();
       } catch (e) {
+         setBusy(false);
          console.error(e);
       }
    };
@@ -77,7 +84,7 @@ const EditModal = (props) => {
             <Preparation onChange={setPreparation} value={preparation} />
             <Divider />
             <ServingStyle onChange={setServingStyle} value={servingStyle} />
-            <Button variant="primary" onClick={onSave}>
+            <Button variant="primary" onClick={onSave} busy={busy}>
                Spara
             </Button>
          </ButtonWrapper>

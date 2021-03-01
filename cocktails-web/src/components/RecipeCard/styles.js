@@ -62,4 +62,5 @@ export const Icon = styled.img`
    width: 100%;
    height: auto;
    display: block;
+   cursor: pointer;
 `;

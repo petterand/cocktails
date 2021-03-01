@@ -12,6 +12,7 @@ const AddRecipe = () => {
    const [dirty, setDirty] = useState(false);
    const [preparation, setPreparation] = useState(null);
    const [servingStyle, setServingStyle] = useState(null);
+   const [busy, setBusy] = useState(false);
    const { addRecipe } = useRecipeContext();
 
    useEffect(() => {
@@ -41,9 +42,12 @@ const AddRecipe = () => {
                servingStyle,
                preparation,
             };
+            setBusy(true);
             await addRecipe(processedRecipe);
+            setBusy(false);
             setExpanded(false);
          } catch (e) {
+            setBusy(false);
             console.error(e);
          }
       }
@@ -83,6 +87,7 @@ const AddRecipe = () => {
                   onChangeServingStyle={onChangeTool(setServingStyle)}
                   selectedServingStyle={servingStyle}
                   selectedPreperation={preparation}
+                  buttonBusy={busy}
                />
             </>
          ) : (
