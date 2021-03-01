@@ -1,29 +1,33 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import processRecipe from '../../common/processRecipe';
+import onClickOutside from '../../common/onClickOutside';
 import { useRecipeContext } from '../../contextProviders/recipeContext';
-import Button from '../Button';
-
-const Tools = (props) => {
-   return (
-      <div>
-         <Button onClick={props.saveRecipe}>Lägg till</Button>
-      </div>
-   );
-};
+import Tools from './Tools';
 
 const AddRecipe = () => {
    const addRef = useRef(null);
+   const wrapperRef = useRef(null);
    const [expanded, setExpanded] = useState(false);
    const [dirty, setDirty] = useState(false);
+   const [preparation, setPreparation] = useState(null);
+   const [servingStyle, setServingStyle] = useState(null);
    const { addRecipe } = useRecipeContext();
 
    useEffect(() => {
       const el = addRef.current;
+      let remove;
       if (el && expanded) {
+         remove = onClickOutside(wrapperRef.current, () => {
+            if (!dirty) {
+               setExpanded(false);
+            }
+         });
          el.focus();
       }
-   }, [expanded]);
+
+      return () => remove && remove();
+   }, [expanded, dirty]);
 
    const saveRecipe = async (e) => {
       e.stopPropagation();
@@ -32,7 +36,12 @@ const AddRecipe = () => {
 
       if (recipe) {
          try {
-            await addRecipe(processRecipe(recipe));
+            const processedRecipe = {
+               ...processRecipe(recipe),
+               servingStyle,
+               preparation,
+            };
+            await addRecipe(processedRecipe);
             setExpanded(false);
          } catch (e) {
             console.error(e);
@@ -50,24 +59,35 @@ const AddRecipe = () => {
       }
    };
 
+   const onChangeTool = (cb) => (value) => {
+      setDirty(true);
+      cb(value);
+   };
+
    return (
       <AddRecipeWrapper
          expanded={expanded}
-         onClick={() => {
-            setExpanded(true);
-         }}
+         onClick={() => setExpanded(true)}
+         ref={wrapperRef}
       >
          {expanded ? (
-            <AddRecipeTextBox
-               expanded={expanded}
-               ref={addRef}
-               onBlur={() => !dirty && setExpanded(false)}
-               onInput={onInput}
-            />
+            <>
+               <AddRecipeTextBox
+                  expanded={expanded}
+                  ref={addRef}
+                  onInput={onInput}
+               />
+               <Tools
+                  saveRecipe={saveRecipe}
+                  onChangePreparation={onChangeTool(setPreparation)}
+                  onChangeServingStyle={onChangeTool(setServingStyle)}
+                  selectedServingStyle={servingStyle}
+                  selectedPreperation={preparation}
+               />
+            </>
          ) : (
             'Lägg till recept'
          )}
-         {expanded && <Tools saveRecipe={saveRecipe} />}
       </AddRecipeWrapper>
    );
 };
@@ -83,6 +103,7 @@ const AddRecipeTextBox = styled.textarea`
 
 const expandedStyle = css`
    height: 200px;
+   padding: 16px 16px 8px;
 `;
 
 const AddRecipeWrapper = styled.div`

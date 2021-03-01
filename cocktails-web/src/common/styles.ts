@@ -79,3 +79,11 @@ export const Button = styled.button`
    padding: 8px 16px;
    font-size: 0.85rem;
 `;
+
+export const Divider = styled.div`
+   width: 1px;
+   border-left: 1px solid var(--timber-wolf);
+   height: 25px;
+   align-self: center;
+   margin: 0 4px;
+`;

@@ -1,12 +1,15 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import processRecipe from '../../common/processRecipe/processRecipe';
+import { Divider } from '../../common/styles';
 import { useModalContext } from '../../contextProviders/modalContext';
 import { useRecipeContext } from '../../contextProviders/recipeContext';
 import Button from '../Button';
+import Preparation from '../Preparation';
+import ServingStyle from '../ServingStyle';
 
 const EditTextBox = styled.textarea`
-   border: 1px solid var(--battleship-grey);
+   border: none;
    outline: none;
    flex: 1;
    font-family: 'Ubuntu', sans-serif;
@@ -25,9 +28,12 @@ const Wrapper = styled.div`
 `;
 
 const ButtonWrapper = styled.div`
-   margin-top: 8px;
+   border-top: 1px solid var(--timber-wolf);
+   padding-top: 8px;
    display: flex;
-   justify-content: flex-end;
+   > button {
+      margin-left: auto;
+   }
 `;
 
 function recipeToText(recipe) {
@@ -38,15 +44,25 @@ function recipeToText(recipe) {
 
 const EditModal = (props) => {
    const inputRef = useRef(null);
+   const [preparation, setPreparation] = useState(null);
+   const [servingStyle, setServingStyle] = useState(null);
    const { updateRecipe } = useRecipeContext();
    const { closeModal } = useModalContext();
+
+   useEffect(() => {
+      setPreparation(props.value.preparation);
+      setServingStyle(props.value.servingStyle);
+   }, [props.value]);
 
    const onSave = async () => {
       try {
          const recipe = {
             ...props.value,
+            preparation,
+            servingStyle,
             ...processRecipe(inputRef.current.value),
          };
+
          await updateRecipe(recipe);
          closeModal();
       } catch (e) {
@@ -58,6 +74,9 @@ const EditModal = (props) => {
       <Wrapper>
          <EditTextBox defaultValue={recipeToText(props.value)} ref={inputRef} />
          <ButtonWrapper>
+            <Preparation onChange={setPreparation} value={preparation} />
+            <Divider />
+            <ServingStyle onChange={setServingStyle} value={servingStyle} />
             <Button variant="primary" onClick={onSave}>
                Spara
             </Button>
