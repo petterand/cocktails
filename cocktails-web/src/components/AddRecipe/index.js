@@ -4,6 +4,7 @@ import processRecipe from '../../common/processRecipe';
 import onClickOutside from '../../common/onClickOutside';
 import { useRecipeContext } from '../../contextProviders/recipeContext';
 import Tools from './Tools';
+import { useToastContext } from '../../contextProviders/toastContext';
 
 const AddRecipe = () => {
    const addRef = useRef(null);
@@ -14,6 +15,7 @@ const AddRecipe = () => {
    const [servingStyle, setServingStyle] = useState(null);
    const [busy, setBusy] = useState(false);
    const { addRecipe } = useRecipeContext();
+   const { showToast } = useToastContext();
 
    useEffect(() => {
       const el = addRef.current;
@@ -47,6 +49,11 @@ const AddRecipe = () => {
             setBusy(false);
             setExpanded(false);
          } catch (e) {
+            showToast({
+               text: 'Det gick inte att lägga till cocktail',
+               variant: 'error',
+               data: e.message,
+            });
             setBusy(false);
             console.error(e);
          }

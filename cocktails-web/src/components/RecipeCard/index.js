@@ -10,12 +10,14 @@ import ConfirmModal from '../ConfirmModal';
 import { useUserContext } from '../../contextProviders/userContext';
 import EditModal from '../EditModal';
 import navigate from '../../common/navigate';
+import { useToastContext } from '../../contextProviders/toastContext';
 
 const RecipeCard = (props) => {
    const containerRef = useRef(null);
    const { openModal } = useModalContext();
    const { removeRecipe } = useRecipeContext();
    const { isSignedIn } = useUserContext();
+   const { showToast } = useToastContext();
 
    const noop = () => {};
 
@@ -64,7 +66,11 @@ const RecipeCard = (props) => {
    const onShare = async () => {
       const url = `${window.location.origin}/#${props.recipe.urlId}`;
       await navigator.clipboard.writeText(url);
-      console.log('written to clipboard');
+      showToast({
+         variant: 'info',
+         timeout: 3000,
+         text: 'Url kopierad till urklipp',
+      });
    };
 
    const openDetails = (e) => {

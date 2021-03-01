@@ -4,6 +4,7 @@ import { useModalContext } from '../../contextProviders/modalContext';
 import { Input } from '../../common/styles';
 import { useUserContext } from '../../contextProviders/userContext';
 import Button from '../Button';
+import { useToastContext } from '../../contextProviders/toastContext';
 
 const Wrapper = styled.div`
    padding: 0 16px;
@@ -33,6 +34,7 @@ const Wrapper = styled.div`
 const SignInModalBody = () => {
    const { closeModal } = useModalContext();
    const { signIn } = useUserContext();
+   const { showToast } = useToastContext();
    const [error, setError] = useState(null);
    const [busy, setBusy] = useState(false);
    const userRef = useRef(null);
@@ -62,7 +64,12 @@ const SignInModalBody = () => {
          }
       } catch (e) {
          console.error(e);
-         setError('Inloggning misslyckades');
+         setBusy(false);
+         showToast({
+            text: 'Inloggning misslyckades',
+            variant: 'error',
+            data: e.message,
+         });
       }
    };
 

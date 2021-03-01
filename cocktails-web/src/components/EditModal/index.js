@@ -4,6 +4,7 @@ import processRecipe from '../../common/processRecipe/processRecipe';
 import { Divider } from '../../common/styles';
 import { useModalContext } from '../../contextProviders/modalContext';
 import { useRecipeContext } from '../../contextProviders/recipeContext';
+import { useToastContext } from '../../contextProviders/toastContext';
 import Button from '../Button';
 import Preparation from '../Preparation';
 import ServingStyle from '../ServingStyle';
@@ -53,6 +54,7 @@ const EditModal = (props) => {
    const [busy, setBusy] = useState(false);
    const { updateRecipe } = useRecipeContext();
    const { closeModal } = useModalContext();
+   const { showToast } = useToastContext();
 
    useEffect(() => {
       setPreparation(props.value.preparation);
@@ -72,6 +74,11 @@ const EditModal = (props) => {
          setBusy(false);
          closeModal();
       } catch (e) {
+         showToast({
+            text: `Det gick inte att uppdatera ${props.value.name}`,
+            variant: 'error',
+            data: e.message,
+         });
          setBusy(false);
          console.error(e);
       }
