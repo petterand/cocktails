@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import navigate from '../../common/navigate';
 import ConditionalRender from '../ConditionalRender';
 import Icon from '../Icon';
 
@@ -6,13 +7,15 @@ const Wrapper = styled.div`
    position: fixed;
    top: 16px;
    bottom: 16px;
-   left: 16px;
-   right: 16px;
    background-color: white;
    z-index: 999;
    border: 1px solid #e0e0e0;
    padding: 32px 16px 16px;
    border-left: 6px solid var(--aero-blue);
+   left: 50%;
+   max-width: 700px;
+   transform: translateX(-50%);
+   width: 90%;
 `;
 
 const CloseButton = styled.span`
@@ -82,12 +85,14 @@ const Details = ({ recipe, onClose }) => (
    <Wrapper>
       <CloseButton onClick={onClose}>&times;</CloseButton>
       <h2>{recipe.name}</h2>
-      <InfoRow className={`${recipe.preparation} ${recipe.servingStyle}`}>
-         <Icon icon={recipe.preparation} />
-         <span>{getPreparationText(recipe.preparation)}</span>
-         <Icon icon={recipe.servingStyle} />
-         <span>{getServingText(recipe.servingStyle)}</span>
-      </InfoRow>
+      <ConditionalRender predicate={recipe.preparation || recipe.servingStyle}>
+         <InfoRow className={`${recipe.preparation} ${recipe.servingStyle}`}>
+            <Icon icon={recipe.preparation} />
+            <span>{getPreparationText(recipe.preparation)}</span>
+            <Icon icon={recipe.servingStyle} />
+            <span>{getServingText(recipe.servingStyle)}</span>
+         </InfoRow>
+      </ConditionalRender>
       <Ingredients>
          {recipe.ingredients.map((ingredient, i) => (
             <li key={i}>{ingredient}</li>
@@ -98,7 +103,7 @@ const Details = ({ recipe, onClose }) => (
 );
 
 const RecipeDetails = ({ recipe }) => {
-   const onClose = () => (window.location.hash = '');
+   const onClose = () => navigate('');
 
    return (
       <ConditionalRender predicate={recipe}>

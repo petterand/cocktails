@@ -18,6 +18,9 @@ const icons = {
 
 const Icon = (props) => {
    const icon = icons[props.icon];
+   if (!icon) {
+      return null;
+   }
    return <img alt={icon.alt} src={icon.src} />;
 };
 

@@ -9,6 +9,7 @@ import { useRecipeContext } from '../../contextProviders/recipeContext';
 import ConfirmModal from '../ConfirmModal';
 import { useUserContext } from '../../contextProviders/userContext';
 import EditModal from '../EditModal';
+import navigate from '../../common/navigate';
 
 const RecipeCard = (props) => {
    const containerRef = useRef(null);
@@ -69,7 +70,7 @@ const RecipeCard = (props) => {
    const openDetails = (e) => {
       e.stopPropagation();
       if (!isMenuOpen()) {
-         window.location.hash = `#${props.recipe.urlId}`;
+         navigate(props.recipe.urlId);
       }
    };
 

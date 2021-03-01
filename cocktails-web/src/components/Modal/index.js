@@ -19,13 +19,15 @@ const ModalContent = styled.div`
    background-color: #fff;
    padding: 48px 16px 16px;
    position: relative;
-   > span {
-      font-size: 32px;
-      display: block;
-      position: absolute;
-      right: 16px;
-      top: 6px;
-   }
+`;
+
+const CloseButton = styled.span`
+   cursor: pointer;
+   font-size: 32px;
+   display: block;
+   position: absolute;
+   right: 16px;
+   top: 6px;
 `;
 
 const Modal = (props) => {
@@ -33,7 +35,7 @@ const Modal = (props) => {
    return (
       <ModalWrapper>
          <ModalContent>
-            <span onClick={closeModal}>×</span>
+            <CloseButton onClick={closeModal}>×</CloseButton>
             {props.children}
          </ModalContent>
       </ModalWrapper>
