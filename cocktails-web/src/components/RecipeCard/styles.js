@@ -19,15 +19,16 @@ export const RecipeContent = styled.div`
       text-overflow: ellipsis;
    }
    > p:first-child {
-      font-weight: bold;
+      font-weight: 550;
       margin-bottom: 8px;
-      font-size: 1.1rem;
+      font-size: 1rem;
       text-transform: capitalize;
    }
    ul {
       margin: 16px 0 8px 0;
       list-style-type: none;
       padding: 0;
+      font-size: 0.9rem;
    }
 `;
 

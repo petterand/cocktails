@@ -7,6 +7,7 @@ const path = require('path');
 const cssRegex = /\.css$/;
 const cssModuleRegex = /\.module\.css$/;
 const lessRegex = /\.less$/;
+const sassRegex = /\.scss$/;
 
 const env = dotenv.config().parsed;
 const envKeys = Object.keys(env).reduce((prev, next) => {
@@ -75,7 +76,15 @@ module.exports = [
                use: getStyleLoaders({ importLoaders: 2 }, 'less-loader'),
             },
             {
+               test: sassRegex,
+               use: getStyleLoaders({ importLoaders: 2 }, 'sass-loader'),
+            },
+            {
                test: /\.svg$/,
+               type: 'asset/inline',
+            },
+            {
+               test: /\.ttf$/,
                type: 'asset/inline',
             },
          ],
