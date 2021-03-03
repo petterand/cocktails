@@ -1,66 +1,22 @@
-import styled from 'styled-components';
 import navigate from '../../common/navigate';
+import { useUserContext } from '../../contextProviders/userContext';
 import ConditionalRender from '../ConditionalRender';
 import Icon from '../Icon';
-
-const Wrapper = styled.div`
-   position: fixed;
-   top: 16px;
-   bottom: 16px;
-   background-color: white;
-   z-index: 999;
-   border: 1px solid #e0e0e0;
-   padding: 32px 16px 16px;
-   border-left: 6px solid var(--aero-blue);
-   left: 50%;
-   max-width: 700px;
-   transform: translateX(-50%);
-   width: 90%;
-`;
-
-const CloseButton = styled.span`
-   font-size: 32px;
-   position: absolute;
-   top: 16px;
-   right: 16px;
-   line-height: 12px;
-   cursor: pointer;
-`;
-
-const Ingredients = styled.ul`
-   margin-top: 24px;
-   list-style-type: none;
-`;
-
-const Instructions = styled.p`
-   margin-top: 32px;
-`;
-
-const InfoRow = styled.div`
-   display: flex;
-   align-items: center;
-   margin-top: 8px;
-   > span {
-      font-size: 12px;
-   }
-   > img {
-      margin-right: 4px;
-      &:first-of-type {
-         height: 32px;
-      }
-      &:last-of-type {
-         margin-left: 16px;
-         height: 20px;
-      }
-   }
-   &.stir {
-      > img {
-         &:first-of-type {
-            margin-bottom: 8px;
-         }
-      }
-   }
-`;
+import editIcon from '../../../images/edit.svg';
+import removeIcon from '../../../images/remove.svg';
+import {
+   CloseButton,
+   InfoRow,
+   Ingredients,
+   Instructions,
+   ToolsWrapper,
+   Wrapper,
+   Header,
+} from './styles';
+import { useRecipeContext } from '../../contextProviders/recipeContext';
+import { useModalContext } from '../../contextProviders/modalContext';
+import ConfirmModal from '../ConfirmModal';
+import EditModal from '../EditModal';
 
 const getServingText = (style) => {
    const map = {
@@ -81,10 +37,52 @@ const getPreparationText = (prep) => {
    return map[prep] || '';
 };
 
+const Tools = ({ recipe }) => {
+   const { isSignedIn } = useUserContext();
+   const { openModal } = useModalContext();
+   const { removeRecipe } = useRecipeContext();
+
+   const onRemove = (id) => async () => {
+      const remove = async () => {
+         removeRecipe(id);
+      };
+      openModal({
+         body: (
+            <ConfirmModal onPrimary={remove}>
+               Är du säker på att du vill ta bort receptet?
+            </ConfirmModal>
+         ),
+      });
+   };
+
+   const onEdit = () => {
+      openModal({
+         body: <EditModal value={recipe} />,
+      });
+   };
+
+   return (
+      <ConditionalRender predicate={isSignedIn}>
+         <ToolsWrapper>
+            <div onClick={onEdit}>
+               <img src={editIcon} />
+            </div>
+            <div onClick={onRemove(recipe.id)}>
+               <img src={removeIcon} />
+            </div>
+         </ToolsWrapper>
+      </ConditionalRender>
+   );
+};
+
 const Details = ({ recipe, onClose }) => (
    <Wrapper>
       <CloseButton onClick={onClose}>&times;</CloseButton>
-      <h2>{recipe.name}</h2>
+
+      <Header>
+         <h2>{recipe.name}</h2>
+         <Tools recipe={recipe} />
+      </Header>
       <ConditionalRender predicate={recipe.preparation || recipe.servingStyle}>
          <InfoRow className={`${recipe.preparation} ${recipe.servingStyle}`}>
             <Icon icon={recipe.preparation} />

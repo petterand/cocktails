@@ -1,25 +1,16 @@
 import React, { useEffect, useRef } from 'react';
 import anime from 'animejs/lib/anime.es.js';
-import edit from '../../../images/edit.svg';
-import remove from '../../../images/remove.svg';
 import share from '../../../images/share_white.svg';
+import expand from '../../../images/expand.svg';
 import { RecipeContent, Card, BackMenu, Icon, RecipeName } from './styles';
-import { useModalContext } from '../../contextProviders/modalContext';
-import { useRecipeContext } from '../../contextProviders/recipeContext';
-import ConfirmModal from '../ConfirmModal';
-import { useUserContext } from '../../contextProviders/userContext';
-import EditModal from '../EditModal';
+
 import navigate from '../../common/navigate';
 import { useToastContext } from '../../contextProviders/toastContext';
 
 const RecipeCard = (props) => {
    const containerRef = useRef(null);
-   const { openModal } = useModalContext();
-   const { removeRecipe } = useRecipeContext();
-   const { isSignedIn } = useUserContext();
-   const { showToast } = useToastContext();
 
-   const noop = () => {};
+   const { showToast } = useToastContext();
 
    const animate = (val, duration = 300) =>
       anime({
@@ -30,7 +21,7 @@ const RecipeCard = (props) => {
 
    useEffect(() => {
       const hasHinted = localStorage.getItem('menu-hint');
-      if (!hasHinted && isSignedIn && props.recipeIndex === 0) {
+      if (!hasHinted && props.recipeIndex === 0) {
          setTimeout(() => animate(-25, 700), 1000);
          setTimeout(() => animate(0), 2500);
          localStorage.setItem('menu-hint', true);
@@ -48,21 +39,6 @@ const RecipeCard = (props) => {
       }
    };
 
-   const setHandler = (handler) => (isSignedIn ? handler : noop);
-
-   const onRemove = (id) => async () => {
-      const remove = async () => {
-         removeRecipe(id);
-      };
-      openModal({
-         body: (
-            <ConfirmModal onPrimary={remove}>
-               Är du säker på att du vill ta bort receptet?
-            </ConfirmModal>
-         ),
-      });
-   };
-
    const onShare = async () => {
       const url = `${window.location.origin}/#${props.recipe.urlId}`;
       await navigator.clipboard.writeText(url);
@@ -75,20 +51,13 @@ const RecipeCard = (props) => {
 
    const openDetails = (e) => {
       e.stopPropagation();
-      if (!isMenuOpen()) {
-         navigate(props.recipe.urlId);
-      }
-   };
 
-   const openEditModal = () => {
-      openModal({
-         body: <EditModal value={props.recipe} />,
-      });
+      navigate(props.recipe.urlId);
    };
 
    return (
       <Card>
-         <RecipeContent onClick={setHandler(onClick)} ref={containerRef}>
+         <RecipeContent onClick={onClick} ref={containerRef}>
             <RecipeName onClick={openDetails}>{props.recipe.name}</RecipeName>
             <ul>
                {props.recipe.ingredients.map((ingredient, i) => (
@@ -100,24 +69,19 @@ const RecipeCard = (props) => {
          <BackMenu>
             <div>
                <div onClick={onShare}>
-                  <Icon
-                     alt="Share icon"
-                     width="26px"
-                     height="26px"
-                     src={share}
-                  />
+                  <Icon alt="Share icon" src={share} />
                </div>
-               <div onClick={openEditModal}>
-                  <Icon alt="Edit icon" width="26px" height="26px" src={edit} />
+               <div onClick={openDetails}>
+                  <Icon alt="Visa detaljer" src={expand} />
                </div>
-               <div onClick={onRemove(props.recipe.id)}>
-                  <Icon
-                     alt="Remove icon"
-                     width="26px"
-                     height="26px"
-                     src={remove}
-                  />
-               </div>
+               {/* <ConditionalRender predicate={isSignedIn}>
+                  <div onClick={openEditModal}>
+                     <Icon alt="Edit icon" src={edit} />
+                  </div>
+                  <div onClick={onRemove(props.recipe.id)}>
+                     <Icon alt="Remove icon" src={remove} />
+                  </div>
+               </ConditionalRender> */}
             </div>
          </BackMenu>
       </Card>

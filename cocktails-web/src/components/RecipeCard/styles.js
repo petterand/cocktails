@@ -36,7 +36,6 @@ export const RecipeContent = styled.div`
 export const Card = styled.div`
    position: relative;
    margin-bottom: 16px;
-   min-height: 130px;
    display: flex;
    user-select: none;
 `;
@@ -64,8 +63,8 @@ export const BackMenu = styled.div`
 `;
 
 export const Icon = styled.img`
-   width: 100%;
-   height: auto;
+   width: 26px;
+   height: 26px;
    display: block;
    cursor: pointer;
 `;
