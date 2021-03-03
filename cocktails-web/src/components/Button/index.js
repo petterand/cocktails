@@ -17,7 +17,8 @@ const secondaryButton = css`
 const ButtonElem = styled.button`
    border-radius: 4px;
    padding: 8px 16px;
-   font-weight: bold;
+   font-weight: 500;
+   font-family: LibreFranklin;
    ${(props) =>
       props.variant === 'secondary' ? secondaryButton : primaryButton}
    .spinner {

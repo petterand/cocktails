@@ -48,6 +48,8 @@ const AddRecipe = () => {
             await addRecipe(processedRecipe);
             setBusy(false);
             setExpanded(false);
+            setServingStyle(null);
+            setPreparation(null);
          } catch (e) {
             showToast({
                text: 'Det gick inte att lägga till cocktail',

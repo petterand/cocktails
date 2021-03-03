@@ -17,6 +17,7 @@ export const RecipeContent = styled.div`
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      font-size: 0.9rem;
    }
    > p:first-child {
       font-weight: 550;
