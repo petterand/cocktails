@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Filter from '../Filter';
 import Search from '../Search';
-import { toArray } from '../../common';
 
 const SearchAndFilter = (props) => {
    const [showFilter, setShowFilter] = useState(true);
@@ -22,8 +21,6 @@ const SearchAndFilter = (props) => {
       props.onFilter(f);
    };
 
-   const onSearch = (s) => props.onFilter(toArray(s));
-
    return (
       <>
          {!showFilter && (
@@ -31,7 +28,7 @@ const SearchAndFilter = (props) => {
                filterValues={props.filterValues}
                searchValue={searchValue}
                toggle={toggle}
-               onSearch={onSearch}
+               onSearch={props.onSearch}
                shouldReset={props.shouldReset}
             />
          )}

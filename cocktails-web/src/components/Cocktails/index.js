@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import Fuse from 'fuse.js';
 import Header from '../Header';
 import AddRecipe from '../AddRecipe';
 import RecipeList from '../RecipeList';
@@ -25,12 +26,36 @@ const ResetFiltersWrapper = styled.div`
    }
 `;
 
+function formatForFuse(recipes) {
+   const mapIngredients = (i) => ({ value: i });
+   return recipes.map((r) => ({
+      ...r,
+      ingredients: r.ingredients.map(mapIngredients),
+   }));
+}
+
+function revertFuseObject(recipes) {
+   const mapIngredients = (i) => i.value;
+
+   return recipes.map((r) => ({
+      ...r.item,
+      ingredients: r.item?.ingredients?.map(mapIngredients),
+   }));
+}
+
 const Cocktails = () => {
    const { recipes, deepLinkedRecipe } = useRecipeContext();
    const { isSignedIn } = useUserContext();
    const [filters, setFilters] = useState([]);
    const [filterValues, setFilterValues] = useState({});
    const [shouldReset, setShouldReset] = useState(false);
+   const [searchResult, setSearchResult] = useState([]);
+   const fuseOptions = {
+      keys: ['name', 'ingredients.value'],
+      includeMatches: true,
+      useExtendedSearch: true,
+   };
+   const fuse = new Fuse(formatForFuse(recipes), fuseOptions);
 
    useEffect(() => {
       setFilterValues(buildFilterObject(recipes));
@@ -47,12 +72,36 @@ const Cocktails = () => {
       setFilters([recipes[randomIndex].name]);
    };
 
-   const resetFilters = () => setShouldReset(true);
+   const resetFilters = () => {
+      setSearchResult([]);
+      setShouldReset(true);
+   };
+
+   const onSearch = (str) => {
+      const result = fuse.search(`'${str}`);
+
+      setSearchResult(revertFuseObject(result));
+   };
+
+   const onFilter = (arr) => {
+      setSearchResult([]);
+      setFilters(arr);
+   };
+
+   const getFilteredRecipes = () => {
+      if (filters.length > 0) {
+         return recipes.filter(filterRecipes(filters));
+      } else if (searchResult.length > 0) {
+         return searchResult;
+      }
+      return recipes;
+   };
 
    return (
       <>
          <Header
-            onFilter={setFilters}
+            onFilter={onFilter}
+            onSearch={onSearch}
             filterValues={filterValues}
             onRandomize={onRandomize}
             resetFilters={resetFilters}
@@ -60,7 +109,7 @@ const Cocktails = () => {
          />
          <ContentWrapper>
             {isSignedIn && <AddRecipe />}
-            <RecipeList recipes={recipes.filter(filterRecipes(filters))} />
+            <RecipeList recipes={getFilteredRecipes()} />
             <ConditionalRender predicate={filters.length > 0}>
                <ResetFiltersWrapper>
                   <button onClick={resetFilters}>Visa alla</button>
