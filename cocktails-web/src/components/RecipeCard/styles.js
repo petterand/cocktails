@@ -36,6 +36,8 @@ export const RecipeContent = styled.div`
 export const Card = styled.div`
    position: relative;
    margin-bottom: 16px;
+   min-height: 130px;
+   display: flex;
 `;
 
 export const BackMenu = styled.div`
