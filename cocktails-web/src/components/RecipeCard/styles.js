@@ -38,6 +38,7 @@ export const Card = styled.div`
    margin-bottom: 16px;
    min-height: 130px;
    display: flex;
+   user-select: none;
 `;
 
 export const BackMenu = styled.div`
