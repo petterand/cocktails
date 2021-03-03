@@ -129,6 +129,7 @@ const AddRecipeWrapper = styled.div`
    display: flex;
    flex-direction: column;
    ${(props) => props.expanded && expandedStyle}
+   user-select:none;
 
    @media screen and (min-width: 540px) {
       max-width: 500px;
