@@ -9,6 +9,7 @@ import { useToastContext } from '../../contextProviders/toastContext';
 import Button from '../Button';
 import ConditionalRender from '../ConditionalRender';
 import FileDrop from '../FileDrop';
+import FileInput from '../FileInput';
 import Preparation from '../Preparation';
 import ServingStyle from '../ServingStyle';
 
@@ -149,6 +150,8 @@ const EditModal = (props) => {
             <Preparation onChange={setPreparation} value={preparation} />
             <Divider />
             <ServingStyle onChange={setServingStyle} value={servingStyle} />
+            <Divider />
+            <FileInput onFileReceived={handleFile} />
             <Button variant="primary" onClick={onSave} busy={busy}>
                Spara
             </Button>

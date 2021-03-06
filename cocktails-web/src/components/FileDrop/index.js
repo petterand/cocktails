@@ -58,7 +58,7 @@ const FileDrop = (props) => {
 
    const handleFileUpload = async (files) => {
       const file = files[0];
-      if (file.type === 'image/jpeg') {
+      if (file && file.type === 'image/jpeg') {
          const reader = new FileReader();
          reader.onload = (e) => props.onFileReceived(e.target.result, file);
          reader.readAsDataURL(file);
