@@ -52,4 +52,40 @@ async function updateCocktail(cocktail: Recipe) {
    }
 }
 
-export { getCocktails, getKey, addCocktail, deleteCocktail, updateCocktail };
+async function getSignedImageUrl(filename: string, filetype: string) {
+   const { isValid, headers } = getConfig();
+   if (isValid) {
+      const params = { filename, filetype };
+      const res = await axios.get(`${apiUrl}/cocktails/image`, {
+         params,
+         headers,
+      });
+      return res?.data?.data;
+   }
+   return null;
+}
+
+async function uploadImage(file: File, filename: string) {
+   const signedUrl = await getSignedImageUrl(filename, file.type);
+
+   if (signedUrl) {
+      const formData = new FormData();
+      formData.append('file', file, filename);
+      const config = {
+         headers: {
+            'Content-Type': file.type,
+         },
+      };
+
+      await axios.put(signedUrl, file, config);
+   }
+}
+
+export {
+   getCocktails,
+   getKey,
+   addCocktail,
+   deleteCocktail,
+   updateCocktail,
+   uploadImage,
+};

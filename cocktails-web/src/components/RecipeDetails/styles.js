@@ -13,6 +13,24 @@ export const Wrapper = styled.div`
    max-width: 700px;
    transform: translateX(-50%);
    width: 90%;
+
+   div.main-image {
+      margin: -32px -16px 16px;
+      height: 45%;
+      position: relative;
+      display: flex;
+      overflow: hidden;
+      img {
+         height: 100%;
+         margin: 0 auto;
+         &.blur-image {
+            width: 100%;
+            position: absolute;
+            z-index: -1;
+            filter: blur(1.5rem);
+         }
+      }
+   }
 `;
 
 export const CloseButton = styled.span`
@@ -22,6 +40,7 @@ export const CloseButton = styled.span`
    right: 16px;
    line-height: 12px;
    cursor: pointer;
+   z-index: 99;
 `;
 
 export const Ingredients = styled.ul`

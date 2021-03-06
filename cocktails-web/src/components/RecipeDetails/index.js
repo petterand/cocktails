@@ -75,30 +75,42 @@ const Tools = ({ recipe }) => {
    );
 };
 
-const Details = ({ recipe, onClose }) => (
-   <Wrapper>
-      <CloseButton onClick={onClose}>&times;</CloseButton>
-
-      <Header>
-         <h2>{recipe.name}</h2>
-         <Tools recipe={recipe} />
-      </Header>
-      <ConditionalRender predicate={recipe.preparation || recipe.servingStyle}>
-         <InfoRow className={`${recipe.preparation} ${recipe.servingStyle}`}>
-            <Icon icon={recipe.preparation} />
-            <span>{getPreparationText(recipe.preparation)}</span>
-            <Icon icon={recipe.servingStyle} />
-            <span>{getServingText(recipe.servingStyle)}</span>
-         </InfoRow>
-      </ConditionalRender>
-      <Ingredients>
-         {recipe.ingredients.map((ingredient, i) => (
-            <li key={i}>{ingredient}</li>
-         ))}
-      </Ingredients>
-      <Instructions>{recipe.description}</Instructions>
-   </Wrapper>
-);
+const Details = ({ recipe, onClose }) => {
+   return (
+      <Wrapper>
+         <CloseButton onClick={onClose}>&times;</CloseButton>
+         <ConditionalRender predicate={recipe.image}>
+            <div className="main-image">
+               <img
+                  src={`${process.env.S3_BUCKET}${recipe.image}`}
+                  className="blur-image"
+               />
+               <img src={`${process.env.S3_BUCKET}${recipe.image}`} />
+            </div>
+         </ConditionalRender>
+         <Header>
+            <h2>{recipe.name}</h2>
+            <Tools recipe={recipe} />
+         </Header>
+         <ConditionalRender
+            predicate={recipe.preparation || recipe.servingStyle}
+         >
+            <InfoRow className={`${recipe.preparation} ${recipe.servingStyle}`}>
+               <Icon icon={recipe.preparation} />
+               <span>{getPreparationText(recipe.preparation)}</span>
+               <Icon icon={recipe.servingStyle} />
+               <span>{getServingText(recipe.servingStyle)}</span>
+            </InfoRow>
+         </ConditionalRender>
+         <Ingredients>
+            {recipe.ingredients.map((ingredient, i) => (
+               <li key={i}>{ingredient}</li>
+            ))}
+         </Ingredients>
+         <Instructions>{recipe.description}</Instructions>
+      </Wrapper>
+   );
+};
 
 const RecipeDetails = ({ recipe }) => {
    const onClose = () => navigate('');

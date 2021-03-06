@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import { uploadImage } from '../../common/api';
 import processRecipe from '../../common/processRecipe/processRecipe';
 import { Divider } from '../../common/styles';
 import { useModalContext } from '../../contextProviders/modalContext';
 import { useRecipeContext } from '../../contextProviders/recipeContext';
 import { useToastContext } from '../../contextProviders/toastContext';
 import Button from '../Button';
+import ConditionalRender from '../ConditionalRender';
+import FileDrop from '../FileDrop';
 import Preparation from '../Preparation';
 import ServingStyle from '../ServingStyle';
 
@@ -41,10 +44,41 @@ const ButtonWrapper = styled.div`
    }
 `;
 
+const ImageRow = styled.div`
+   height: 50px;
+   margin-bottom: 8px;
+   img {
+      height: 100%;
+      border-radius: 2px;
+   }
+`;
+
 function recipeToText(recipe) {
    return `${recipe.name}\r\n\r\n${recipe.ingredients.join('\r\n')}\r\n\r\n${
       recipe.description || ''
    }`;
+}
+
+const getImageName = (recipeName) => {
+   const base = recipeName.replace(' ', '').toLowerCase();
+   return {
+      jpg: `${base}.jpg`,
+      webp: `${base}.webp`,
+   };
+};
+
+function waitForImageOnS3(filename) {
+   const src = `${process.env.S3_BUCKET}${filename}`;
+   return new Promise((resolve) => {
+      const interval = setInterval(() => {
+         const img = new Image();
+         img.onload = () => {
+            clearInterval(interval);
+            resolve();
+         };
+         img.src = src;
+      }, 1500);
+   });
 }
 
 const EditModal = (props) => {
@@ -52,6 +86,8 @@ const EditModal = (props) => {
    const [preparation, setPreparation] = useState(null);
    const [servingStyle, setServingStyle] = useState(null);
    const [busy, setBusy] = useState(false);
+   const [imageFile, setImageFile] = useState(null);
+   const [localImage, setLocalImage] = useState(null);
    const { updateRecipe } = useRecipeContext();
    const { closeModal } = useModalContext();
    const { showToast } = useToastContext();
@@ -63,14 +99,21 @@ const EditModal = (props) => {
 
    const onSave = async () => {
       try {
+         setBusy(true);
          const recipe = {
             ...props.value,
             preparation,
             servingStyle,
             ...processRecipe(inputRef.current.value),
          };
-         setBusy(true);
+         if (imageFile) {
+            const imageName = getImageName(recipe.name);
+            await uploadImage(imageFile, imageName.jpg);
+            await waitForImageOnS3(imageName.webp);
+            recipe.image = imageName.webp;
+         }
          await updateRecipe(recipe);
+
          setBusy(false);
          closeModal();
       } catch (e) {
@@ -84,9 +127,24 @@ const EditModal = (props) => {
       }
    };
 
+   const handleFile = async (image, file) => {
+      setLocalImage(image);
+      setImageFile(file);
+   };
+
    return (
       <Wrapper>
-         <EditTextBox defaultValue={recipeToText(props.value)} ref={inputRef} />
+         <FileDrop onFileReceived={handleFile}>
+            <EditTextBox
+               defaultValue={recipeToText(props.value)}
+               ref={inputRef}
+            />
+            <ConditionalRender predicate={localImage}>
+               <ImageRow>
+                  <img src={localImage} />
+               </ImageRow>
+            </ConditionalRender>
+         </FileDrop>
          <ButtonWrapper>
             <Preparation onChange={setPreparation} value={preparation} />
             <Divider />
