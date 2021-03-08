@@ -9,7 +9,11 @@ const Search = (props) => {
 
    const searchForValue = (val) => {
       inputRef.current.value = val;
-      props.onSearch(val);
+      props.onSearch(val, (res) => {
+         if (res.length > 0) {
+            inputRef.current.blur();
+         }
+      });
    };
 
    useEffect(() => {
@@ -31,7 +35,6 @@ const Search = (props) => {
       switch (e.keyCode) {
          case keys.ENTER:
             searchForValue(searchValue);
-            inputRef.current.blur();
             return;
          case keys.ESC:
             e.target.value = '';
@@ -49,7 +52,7 @@ const Search = (props) => {
    const clearSearch = () => {
       inputRef.current.value = '';
       setShowClear(false);
-      props.onSearch([]);
+      props.onSearch();
    };
 
    return (

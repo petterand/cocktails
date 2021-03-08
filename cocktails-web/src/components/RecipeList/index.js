@@ -20,11 +20,25 @@ const RecipeList = (props) => {
       setNoCols(deviceSize === 'small' ? 2 : 3);
    }, [deviceSize]);
 
+   const sortRecipes = (a, b) => {
+      a = a.name.toLowerCase();
+      b = b.name.toLowerCase();
+      if (a < b) {
+         return -1;
+      } else if (a > b) {
+         return 1;
+      } else {
+         return 0;
+      }
+   };
+
+   const sorted = props.recipes.sort(sortRecipes);
+
    return (
       <RecipeListWrapper>
          <Suspense fallback={<Loading />}>
             <CascadingGrid noCols={noCols}>
-               {props.recipes.map((recipe, i) => (
+               {sorted.map((recipe, i) => (
                   <RecipeCard key={recipe.id} recipeIndex={i} recipe={recipe} />
                ))}
             </CascadingGrid>

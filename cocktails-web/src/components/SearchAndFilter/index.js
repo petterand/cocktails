@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Filter from '../Filter';
 import Search from '../Search';
 
@@ -20,6 +20,12 @@ const SearchAndFilter = (props) => {
    const onFilter = (f) => {
       props.onFilter(f);
    };
+
+   useEffect(() => {
+      if (props.shouldReset) {
+         setShowFilter(true);
+      }
+   }, [props.shouldReset]);
 
    return (
       <>

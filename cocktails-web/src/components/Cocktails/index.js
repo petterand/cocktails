@@ -10,6 +10,7 @@ import { useRecipeContext } from '../../contextProviders/recipeContext';
 import ConditionalRender from '../ConditionalRender';
 import { useUserContext } from '../../contextProviders/userContext';
 import Button from '../Button';
+import NoSearchResult from '../NoSearchResult';
 
 const ContentWrapper = styled.div`
    padding: 0 16px 16px;
@@ -44,7 +45,7 @@ const Cocktails = () => {
    const [filters, setFilters] = useState([]);
    const [filterValues, setFilterValues] = useState({});
    const [shouldReset, setShouldReset] = useState(false);
-   const [searchResult, setSearchResult] = useState([]);
+   const [searchResult, setSearchResult] = useState(null);
    const fuseOptions = {
       keys: ['name', 'ingredients.value'],
       includeMatches: true,
@@ -62,31 +63,40 @@ const Cocktails = () => {
       }
    }, [filters]);
 
+   const isEmptySearchResult = () =>
+      Array.isArray(searchResult) && searchResult.length === 0;
+
    const onRandomize = () => {
       const randomIndex = Math.floor(Math.random() * recipes.length);
       setFilters([recipes[randomIndex].name]);
    };
 
    const resetFilters = () => {
-      setSearchResult([]);
+      setSearchResult(null);
       setShouldReset(true);
    };
 
-   const onSearch = (str) => {
+   const onSearch = (str, callback) => {
+      if (!str) {
+         return;
+      }
       const result = fuse.search(`'${str}`);
 
       setSearchResult(revertFuseObject(result));
+      if (callback) {
+         callback(result);
+      }
    };
 
    const onFilter = (arr) => {
-      setSearchResult([]);
+      setSearchResult(null);
       setFilters(arr);
    };
 
    const getFilteredRecipes = () => {
       if (filters.length > 0) {
          return recipes.filter(filterRecipes(filters));
-      } else if (searchResult.length > 0) {
+      } else if (Array.isArray(searchResult) && searchResult.length > 0) {
          return searchResult;
       }
       return recipes;
@@ -106,6 +116,10 @@ const Cocktails = () => {
          />
          <ContentWrapper>
             {isSignedIn && <AddRecipe />}
+            <NoSearchResult
+               show={isEmptySearchResult()}
+               onHide={() => setSearchResult(null)}
+            />
             <RecipeList recipes={filteredRecipes} />
             <ConditionalRender
                predicate={filteredRecipes.length !== recipes.length}

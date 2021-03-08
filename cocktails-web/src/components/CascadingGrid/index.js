@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 const GridContainer = styled.div`
@@ -11,7 +11,7 @@ const GridContainer = styled.div`
 
 const getColumns = (children, noCols) => {
    const items = [...children];
-   const columns = new Array(2);
+   const columns = new Array(noCols);
 
    for (let i = 0; i < items.length; i++) {
       const colIndex = i % noCols;
@@ -31,17 +31,7 @@ const renderChildren = (props) => {
 };
 
 const CascadingGrid = (props) => {
-   const containerRef = useRef(null);
-
-   return (
-      <GridContainer gutter={props.gutter} ref={containerRef}>
-         {renderChildren(props)}
-      </GridContainer>
-   );
-};
-
-CascadingGrid.defaultProps = {
-   gutter: 0,
+   return <GridContainer>{renderChildren(props)}</GridContainer>;
 };
 
 export default CascadingGrid;
