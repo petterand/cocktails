@@ -14,13 +14,33 @@ const secondaryButton = css`
    background-color: #fff;
 `;
 
+const linkButton = css`
+   border: none;
+   background: none;
+   text-decoration: underline;
+   cursor: pointer;
+   outline: none;
+`;
+
+const getVariantStyling = (variant) => {
+   switch (variant) {
+      case 'primary':
+         return primaryButton;
+      case 'secondary':
+         return secondaryButton;
+      case 'link':
+         return linkButton;
+      default:
+         return primaryButton;
+   }
+};
+
 const ButtonElem = styled.button`
    border-radius: 4px;
    padding: 8px 16px;
    font-weight: 500;
    font-family: LibreFranklin;
-   ${(props) =>
-      props.variant === 'secondary' ? secondaryButton : primaryButton}
+   ${(props) => getVariantStyling(props.variant)}
    .spinner {
       margin-right: 4px;
    }

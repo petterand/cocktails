@@ -2,7 +2,6 @@ import { lazy, Suspense, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import useDeviceSize from '../../common/useDeviceSize';
 import Loading from '../Loading';
-import SuspenseFallback from '../SuspenseFallback';
 
 const RecipeListWrapper = styled.div`
    margin: 16px auto 0;

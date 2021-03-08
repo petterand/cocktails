@@ -31,6 +31,7 @@ const Search = (props) => {
       switch (e.keyCode) {
          case keys.ENTER:
             searchForValue(searchValue);
+            inputRef.current.blur();
             return;
          case keys.ESC:
             e.target.value = '';

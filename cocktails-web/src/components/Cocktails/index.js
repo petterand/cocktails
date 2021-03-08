@@ -9,21 +9,16 @@ import { filterRecipes, buildFilterObject } from '../../common/filters';
 import { useRecipeContext } from '../../contextProviders/recipeContext';
 import ConditionalRender from '../ConditionalRender';
 import { useUserContext } from '../../contextProviders/userContext';
+import Button from '../Button';
 
 const ContentWrapper = styled.div`
-   padding: 0 16px;
+   padding: 0 16px 16px;
    margin-top: 16px;
 `;
 
 const ResetFiltersWrapper = styled.div`
    display: flex;
    justify-content: center;
-   > button {
-      border: none;
-      background: none;
-      text-decoration: underline;
-      cursor: pointer;
-   }
 `;
 
 function formatForFuse(recipes) {
@@ -97,6 +92,8 @@ const Cocktails = () => {
       return recipes;
    };
 
+   const filteredRecipes = getFilteredRecipes();
+
    return (
       <>
          <Header
@@ -109,10 +106,14 @@ const Cocktails = () => {
          />
          <ContentWrapper>
             {isSignedIn && <AddRecipe />}
-            <RecipeList recipes={getFilteredRecipes()} />
-            <ConditionalRender predicate={filters.length > 0}>
+            <RecipeList recipes={filteredRecipes} />
+            <ConditionalRender
+               predicate={filteredRecipes.length !== recipes.length}
+            >
                <ResetFiltersWrapper>
-                  <button onClick={resetFilters}>Visa alla</button>
+                  <Button variant="link" onClick={resetFilters}>
+                     Visa alla
+                  </Button>
                </ResetFiltersWrapper>
             </ConditionalRender>
          </ContentWrapper>
