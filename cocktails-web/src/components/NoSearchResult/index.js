@@ -4,10 +4,12 @@ import styled from 'styled-components';
 const Text = styled.p`
    overflow: hidden;
    height: 0;
+
    transition: height 0.2s;
    text-align: center;
    font-size: 0.8rem;
    font-style: italic;
+   line-height: 3rem;
    ${(props) => props.show && 'height: 2rem;'}
 `;
 

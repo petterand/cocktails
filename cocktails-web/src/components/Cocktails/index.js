@@ -14,7 +14,6 @@ import NoSearchResult from '../NoSearchResult';
 
 const ContentWrapper = styled.div`
    padding: 0 16px 16px;
-   margin-top: 16px;
 `;
 
 const ResetFiltersWrapper = styled.div`
