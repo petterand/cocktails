@@ -40,7 +40,7 @@ const Data = (props) => {
    if (!props.data) {
       return null;
    }
-   console.log(props.showData);
+
    return (
       <ConditionalRender
          predicate={props.showData}

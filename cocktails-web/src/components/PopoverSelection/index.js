@@ -12,6 +12,7 @@ const IconWrapper = styled.div`
    justify-content: center;
    align-items: center;
    padding: 4px;
+   cursor: pointer;
    ${(props) => !props.hasValue && 'opacity: .5;'}
    > img {
       height: 100%;

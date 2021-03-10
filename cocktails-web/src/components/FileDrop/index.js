@@ -14,6 +14,7 @@ const ActiveWrapper = styled.div`
    background-color: #ffffffbf;
    justify-content: center;
    align-items: center;
+   z-index: 1;
    img {
       height: 100px;
       pointer-events: none;

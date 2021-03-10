@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import styled from 'styled-components';
 import picture from '../../../images/picture.svg';
 
@@ -15,9 +16,11 @@ const Label = styled.label`
    height: 24px;
    width: 24px;
    padding: 2px;
+   cursor: pointer;
 `;
 
 const FileInput = (props) => {
+   const ref = useRef(null);
    const onChange = (e) => {
       const files = e.target.files;
       const file = files[0];
@@ -26,6 +29,7 @@ const FileInput = (props) => {
          reader.onload = (e) => props.onFileReceived(e.target.result, file);
          reader.readAsDataURL(file);
       }
+      e.target.value = '';
    };
 
    return (
@@ -38,6 +42,7 @@ const FileInput = (props) => {
             accept="image/jpeg"
             id="fileinput"
             onChange={onChange}
+            ref={ref}
          />
       </Wrapper>
    );

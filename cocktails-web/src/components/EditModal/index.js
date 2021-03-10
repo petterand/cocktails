@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
-import { uploadImage } from '../../common/api';
+import { deleteImage, uploadImage } from '../../common/api';
 import processRecipe from '../../common/processRecipe/processRecipe';
 import { Divider } from '../../common/styles';
 import { useModalContext } from '../../contextProviders/modalContext';
@@ -12,47 +11,8 @@ import FileDrop from '../FileDrop';
 import FileInput from '../FileInput';
 import Preparation from '../Preparation';
 import ServingStyle from '../ServingStyle';
-
-const EditTextBox = styled.textarea`
-   border: none;
-   outline: none;
-   flex: 1;
-   font-family: 'Ubuntu', sans-serif;
-   font-size: 16px;
-   width: 100%;
-   height: 100%;
-   resize: none;
-   padding: 8px;
-`;
-
-const Wrapper = styled.div`
-   min-height: 300px;
-   display: flex;
-   flex-direction: column;
-   width: calc(90vw - 32px);
-
-   @media screen and (min-width: 540px) {
-      max-width: 700px;
-   }
-`;
-
-const ButtonWrapper = styled.div`
-   border-top: 1px solid var(--timber-wolf);
-   padding-top: 8px;
-   display: flex;
-   > button {
-      margin-left: auto;
-   }
-`;
-
-const ImageRow = styled.div`
-   height: 50px;
-   margin-bottom: 8px;
-   img {
-      height: 100%;
-      border-radius: 2px;
-   }
-`;
+import PreviewImage from './PreviewImage';
+import { ButtonWrapper, EditTextBox, ImageRow, Wrapper } from './style';
 
 function recipeToText(recipe) {
    return `${recipe.name}\r\n\r\n${recipe.ingredients.join('\r\n')}\r\n\r\n${
@@ -89,37 +49,44 @@ const EditModal = (props) => {
    const [busy, setBusy] = useState(false);
    const [imageFile, setImageFile] = useState(null);
    const [localImage, setLocalImage] = useState(null);
+   const [shouldDeleteImage, setShouldDeleteImage] = useState(false);
    const { updateRecipe } = useRecipeContext();
    const { closeModal } = useModalContext();
    const { showToast } = useToastContext();
 
+   const recipe = props.value;
+
    useEffect(() => {
-      setPreparation(props.value.preparation);
-      setServingStyle(props.value.servingStyle);
-   }, [props.value]);
+      setPreparation(recipe.preparation);
+      setServingStyle(recipe.servingStyle);
+   }, [recipe]);
 
    const onSave = async () => {
       try {
          setBusy(true);
-         const recipe = {
-            ...props.value,
+         const newRecipe = {
+            ...recipe,
             preparation,
             servingStyle,
             ...processRecipe(inputRef.current.value),
          };
+         if (shouldDeleteImage) {
+            await deleteImage(newRecipe.image);
+            newRecipe.image = '';
+         }
          if (imageFile) {
-            const imageName = getImageName(recipe.name);
+            const imageName = getImageName(newRecipe.name);
             await uploadImage(imageFile, imageName.jpg);
             await waitForImageOnS3(imageName.webp);
-            recipe.image = imageName.webp;
+            newRecipe.image = imageName.webp;
          }
-         await updateRecipe(recipe);
+         await updateRecipe(newRecipe);
 
          setBusy(false);
          closeModal();
       } catch (e) {
          showToast({
-            text: `Det gick inte att uppdatera ${props.value.name}`,
+            text: `Det gick inte att uppdatera ${recipe.name}`,
             variant: 'error',
             data: e.message,
          });
@@ -129,23 +96,47 @@ const EditModal = (props) => {
    };
 
    const handleFile = async (image, file) => {
+      if (recipe.image) {
+         setShouldDeleteImage(true);
+      }
       setLocalImage(image);
       setImageFile(file);
    };
 
+   const onDeleteImage = async () => {
+      if (recipe.image) {
+         setShouldDeleteImage(true);
+      }
+      if (localImage) {
+         setLocalImage(null);
+         setImageFile(null);
+      }
+   };
+
+   const getImage = () => {
+      if (shouldDeleteImage) {
+         return null;
+      }
+      if (recipe.image) {
+         return `${process.env.S3_BUCKET}${recipe.image}`;
+      }
+      if (localImage) {
+         return localImage;
+      }
+   };
+
+   const image = getImage();
+
    return (
       <Wrapper>
          <FileDrop onFileReceived={handleFile}>
-            <EditTextBox
-               defaultValue={recipeToText(props.value)}
-               ref={inputRef}
-            />
-            <ConditionalRender predicate={localImage}>
-               <ImageRow>
-                  <img src={localImage} />
-               </ImageRow>
-            </ConditionalRender>
+            <EditTextBox defaultValue={recipeToText(recipe)} ref={inputRef} />
          </FileDrop>
+         <ConditionalRender predicate={image}>
+            <ImageRow>
+               <PreviewImage image={image} onDeleteImage={onDeleteImage} />
+            </ImageRow>
+         </ConditionalRender>
          <ButtonWrapper>
             <Preparation onChange={setPreparation} value={preparation} />
             <Divider />

@@ -81,6 +81,14 @@ async function uploadImage(file: File, filename: string) {
    }
 }
 
+async function deleteImage(filename: string) {
+   const { isValid, headers } = getConfig();
+
+   if (isValid) {
+      await axios.delete(`${apiUrl}/cocktails/image/${filename}`, { headers });
+   }
+}
+
 export {
    getCocktails,
    getKey,
@@ -88,4 +96,5 @@ export {
    deleteCocktail,
    updateCocktail,
    uploadImage,
+   deleteImage,
 };
