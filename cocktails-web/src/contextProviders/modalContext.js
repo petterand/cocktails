@@ -10,12 +10,16 @@ const ModalContextProvider = (props) => {
    const openModal = (modal) => {
       const newState = [...openModals, modal];
       setOpenModals(newState);
+      document.querySelector('body').classList.add('modal-open');
    };
 
    const closeModal = () => {
       const newState = [...openModals];
       newState.pop();
       setOpenModals(newState);
+      if (newState.length === 0) {
+         document.querySelector('body').classList.remove('modal-open');
+      }
    };
 
    return (

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import navigate from '../../common/navigate';
 import { useUserContext } from '../../contextProviders/userContext';
 import ConditionalRender from '../ConditionalRender';
@@ -76,6 +77,10 @@ const Tools = ({ recipe }) => {
 };
 
 const Details = ({ recipe, onClose }) => {
+   useEffect(() => {
+      document.querySelector('body').classList.add('details-open');
+   }, []);
+
    return (
       <Wrapper>
          <CloseButton onClick={onClose}>&times;</CloseButton>
@@ -113,7 +118,10 @@ const Details = ({ recipe, onClose }) => {
 };
 
 const RecipeDetails = ({ recipe }) => {
-   const onClose = () => navigate('');
+   const onClose = () => {
+      document.querySelector('body').classList.remove('details-open');
+      navigate('');
+   };
 
    return (
       <ConditionalRender predicate={recipe}>
