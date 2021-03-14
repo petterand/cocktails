@@ -12,8 +12,8 @@ const AlternativeWrapper = styled.div`
    cursor: pointer;
    border: var(--border-width) solid transparent;
    border-radius: 4px;
-   width: 32px;
-   height: 32px;
+   width: 40px;
+   height: 40px;
    padding: 4px;
    display: flex;
    justify-content: center;
