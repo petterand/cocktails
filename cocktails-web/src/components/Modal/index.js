@@ -19,6 +19,8 @@ const ModalContent = styled.div`
    background-color: #fff;
    padding: 48px 16px 16px;
    position: relative;
+   max-width: 90%;
+   z-index: 1000;
 `;
 
 const CloseButton = styled.span`
@@ -28,14 +30,21 @@ const CloseButton = styled.span`
    position: absolute;
    right: 16px;
    top: 6px;
+   z-index: 1000;
 `;
 
 const Modal = (props) => {
    const { closeModal } = useModalContext();
+   const onClose = () => {
+      if (props.onClose) {
+         props.onClose();
+      }
+      closeModal();
+   };
    return (
       <ModalWrapper>
          <ModalContent>
-            <CloseButton onClick={closeModal}>×</CloseButton>
+            <CloseButton onClick={onClose}>×</CloseButton>
             {props.children}
          </ModalContent>
       </ModalWrapper>

@@ -5,6 +5,7 @@ import { Divider } from '../../common/styles';
 import { useModalContext } from '../../contextProviders/modalContext';
 import { useRecipeContext } from '../../contextProviders/recipeContext';
 import { useToastContext } from '../../contextProviders/toastContext';
+import removeIcon from '../../../images/remove.svg';
 import Button from '../Button';
 import ConditionalRender from '../ConditionalRender';
 import FileDrop from '../FileDrop';
@@ -12,7 +13,15 @@ import FileInput from '../FileInput';
 import Preparation from '../Preparation';
 import ServingStyle from '../ServingStyle';
 import PreviewImage from './PreviewImage';
-import { ButtonWrapper, EditTextBox, ImageRow, Wrapper } from './style';
+import {
+   ButtonWrapper,
+   EditTextBox,
+   ImageRow,
+   RemoveWrapper,
+   Wrapper,
+} from './style';
+import ConfirmModal from '../ConfirmModal';
+import navigate from '../../common/navigate';
 
 function recipeToText(recipe) {
    return `${recipe.name}\r\n\r\n${recipe.ingredients.join('\r\n')}\r\n\r\n${
@@ -50,8 +59,8 @@ const EditModal = (props) => {
    const [imageFile, setImageFile] = useState(null);
    const [localImage, setLocalImage] = useState(null);
    const [shouldDeleteImage, setShouldDeleteImage] = useState(false);
-   const { updateRecipe } = useRecipeContext();
-   const { closeModal } = useModalContext();
+   const { updateRecipe, removeRecipe } = useRecipeContext();
+   const { closeModal, openModal } = useModalContext();
    const { showToast } = useToastContext();
 
    const recipe = props.value;
@@ -60,6 +69,20 @@ const EditModal = (props) => {
       setPreparation(recipe.preparation);
       setServingStyle(recipe.servingStyle);
    }, [recipe]);
+
+   const onRemove = (id) => async () => {
+      const remove = async () => {
+         await removeRecipe(id);
+         navigate('');
+      };
+      openModal({
+         body: (
+            <ConfirmModal onPrimary={remove}>
+               Är du säker på att du vill ta bort receptet?
+            </ConfirmModal>
+         ),
+      });
+   };
 
    const onSave = async () => {
       try {
@@ -143,6 +166,10 @@ const EditModal = (props) => {
             <ServingStyle onChange={setServingStyle} value={servingStyle} />
             <Divider />
             <FileInput onFileReceived={handleFile} />
+            <Divider />
+            <RemoveWrapper onClick={onRemove(recipe.id)}>
+               <img src={removeIcon} />
+            </RemoveWrapper>
             <Button variant="primary" onClick={onSave} busy={busy}>
                Spara
             </Button>

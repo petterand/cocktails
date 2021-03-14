@@ -41,3 +41,12 @@ export const ImageRow = styled.div`
       pointer-events: unset;
    }
 `;
+
+export const RemoveWrapper = styled.div`
+   height: 32px;
+   width: 32px;
+   padding: 6px;
+   > img {
+      height: 100%;
+   }
+`;

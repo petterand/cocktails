@@ -1,18 +1,11 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
-   position: fixed;
-   top: 16px;
-   bottom: 16px;
-   background-color: white;
-   z-index: 999;
-   border: 1px solid #e0e0e0;
    padding: 32px 16px 16px;
    border-left: 6px solid var(--aero-blue);
-   left: 50%;
-   max-width: 700px;
-   transform: translateX(-50%);
-   width: 90%;
+   width: 90vw;
+   height: 90vh;
+   margin: -48px 0 -16px -16px;
 
    div.main-image {
       margin: -32px -16px 16px;
@@ -83,6 +76,7 @@ export const ToolsWrapper = styled.div`
    margin-left: 16px;
    > div {
       cursor: pointer;
+      display: flex;
       &:not(last-child) {
          margin-right: 16px;
       }

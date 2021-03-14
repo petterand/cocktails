@@ -1,12 +1,8 @@
-import { useEffect } from 'react';
-import navigate from '../../common/navigate';
 import { useUserContext } from '../../contextProviders/userContext';
 import ConditionalRender from '../ConditionalRender';
 import Icon from '../Icon';
 import editIcon from '../../../images/edit.svg';
-import removeIcon from '../../../images/remove.svg';
 import {
-   CloseButton,
    InfoRow,
    Ingredients,
    Instructions,
@@ -14,9 +10,7 @@ import {
    Wrapper,
    Header,
 } from './styles';
-import { useRecipeContext } from '../../contextProviders/recipeContext';
 import { useModalContext } from '../../contextProviders/modalContext';
-import ConfirmModal from '../ConfirmModal';
 import EditModal from '../EditModal';
 
 const getServingText = (style) => {
@@ -41,20 +35,6 @@ const getPreparationText = (prep) => {
 const Tools = ({ recipe }) => {
    const { isSignedIn } = useUserContext();
    const { openModal } = useModalContext();
-   const { removeRecipe } = useRecipeContext();
-
-   const onRemove = (id) => async () => {
-      const remove = async () => {
-         removeRecipe(id);
-      };
-      openModal({
-         body: (
-            <ConfirmModal onPrimary={remove}>
-               Är du säker på att du vill ta bort receptet?
-            </ConfirmModal>
-         ),
-      });
-   };
 
    const onEdit = () => {
       openModal({
@@ -68,22 +48,14 @@ const Tools = ({ recipe }) => {
             <div onClick={onEdit}>
                <img src={editIcon} />
             </div>
-            <div onClick={onRemove(recipe.id)}>
-               <img src={removeIcon} />
-            </div>
          </ToolsWrapper>
       </ConditionalRender>
    );
 };
 
-const Details = ({ recipe, onClose }) => {
-   useEffect(() => {
-      document.querySelector('body').classList.add('details-open');
-   }, []);
-
+const Details = ({ recipe }) => {
    return (
       <Wrapper>
-         <CloseButton onClick={onClose}>&times;</CloseButton>
          <ConditionalRender predicate={recipe.image}>
             <div className="main-image">
                <img
@@ -118,16 +90,7 @@ const Details = ({ recipe, onClose }) => {
 };
 
 const RecipeDetails = ({ recipe }) => {
-   const onClose = () => {
-      document.querySelector('body').classList.remove('details-open');
-      navigate('');
-   };
-
-   return (
-      <ConditionalRender predicate={recipe}>
-         <Details recipe={recipe} onClose={onClose} />
-      </ConditionalRender>
-   );
+   return <Details recipe={recipe} />;
 };
 
 export default RecipeDetails;

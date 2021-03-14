@@ -11,6 +11,8 @@ import ConditionalRender from '../ConditionalRender';
 import { useUserContext } from '../../contextProviders/userContext';
 import Button from '../Button';
 import NoSearchResult from '../NoSearchResult';
+import { useModalContext } from '../../contextProviders/modalContext';
+import navigate from '../../common/navigate';
 
 const ContentWrapper = styled.div`
    padding: 0 16px 16px;
@@ -41,6 +43,7 @@ function revertFuseObject(recipes) {
 const Cocktails = () => {
    const { recipes, deepLinkedRecipe } = useRecipeContext();
    const { isSignedIn } = useUserContext();
+   const { openModal, closeAll } = useModalContext();
    const [filters, setFilters] = useState([]);
    const [filterValues, setFilterValues] = useState({});
    const [shouldReset, setShouldReset] = useState(false);
@@ -51,6 +54,19 @@ const Cocktails = () => {
       useExtendedSearch: true,
    };
    const fuse = new Fuse(formatForFuse(recipes), fuseOptions);
+
+   useEffect(() => {
+      if (deepLinkedRecipe) {
+         openModal({
+            props: {
+               onClose: () => navigate(''),
+            },
+            body: <RecipeDetails recipe={deepLinkedRecipe} />,
+         });
+      } else {
+         closeAll();
+      }
+   }, [deepLinkedRecipe?.id]);
 
    useEffect(() => {
       setFilterValues(buildFilterObject(recipes));
@@ -130,7 +146,7 @@ const Cocktails = () => {
                </ResetFiltersWrapper>
             </ConditionalRender>
          </ContentWrapper>
-         <RecipeDetails recipe={deepLinkedRecipe} />
+         {/* <RecipeDetails recipe={deepLinkedRecipe} /> */}
       </>
    );
 };

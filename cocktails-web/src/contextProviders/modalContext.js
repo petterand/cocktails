@@ -22,8 +22,13 @@ const ModalContextProvider = (props) => {
       }
    };
 
+   const closeAll = () => {
+      setOpenModals([]);
+      document.querySelector('body').classList.remove('modal-open');
+   };
+
    return (
-      <ModalContext.Provider value={{ openModal, closeModal }}>
+      <ModalContext.Provider value={{ openModal, closeModal, closeAll }}>
          {props.children}
          {openModals.map((m, i) => (
             <Modal key={i} {...m.props}>
