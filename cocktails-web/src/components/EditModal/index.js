@@ -114,7 +114,7 @@ const EditModal = (props) => {
    };
 
    const getImage = () => {
-      if (shouldDeleteImage) {
+      if (shouldDeleteImage && !localImage) {
          return null;
       }
       if (recipe.image) {
