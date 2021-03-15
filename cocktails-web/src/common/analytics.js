@@ -1,5 +1,5 @@
-export const sendEvent = (category, object) => {
+export const sendEvent = (action, object) => {
    if (window.gtag) {
-      window.gtag('event', category, object);
+      window.gtag('event', action, object);
    }
 };

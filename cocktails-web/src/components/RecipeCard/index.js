@@ -52,9 +52,9 @@ const RecipeCard = (props) => {
 
    const openDetails = (source) => (e) => {
       e.stopPropagation();
-      sendEvent('opendetails', {
-         method: source,
-         recipe: props.recipe.name,
+      sendEvent(`open-${source}`, {
+         event_category: 'details',
+         event_label: props.recipe.name,
       });
       navigate(props.recipe.urlId);
    };

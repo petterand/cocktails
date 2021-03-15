@@ -93,8 +93,9 @@ const Details = ({ recipe }) => {
 
 const RecipeDetails = ({ recipe }) => {
    useEffect(() => {
-      sendEvent('showdetails', {
-         recipe: recipe.name,
+      sendEvent('show', {
+         event_category: 'details',
+         event_label: recipe.name,
       });
    }, []);
    return <Details recipe={recipe} />;
