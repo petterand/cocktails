@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import anime from 'animejs/lib/anime.es.js';
+import { sendEvent } from '../../common/analytics';
 import share from '../../../images/share_white.svg';
 import expand from '../../../images/expand.svg';
 import { RecipeContent, Card, BackMenu, Icon, RecipeName } from './styles';
@@ -49,16 +50,21 @@ const RecipeCard = (props) => {
       });
    };
 
-   const openDetails = (e) => {
+   const openDetails = (source) => (e) => {
       e.stopPropagation();
-
+      sendEvent('opendetails', {
+         method: source,
+         recipe: props.recipe.name,
+      });
       navigate(props.recipe.urlId);
    };
 
    return (
       <Card>
          <RecipeContent onClick={onClick} ref={containerRef}>
-            <RecipeName onClick={openDetails}>{props.recipe.name}</RecipeName>
+            <RecipeName onClick={openDetails('name-click')}>
+               {props.recipe.name}
+            </RecipeName>
             <ul>
                {props.recipe.ingredients.map((ingredient, i) => (
                   <li key={i}>{ingredient}</li>
@@ -71,17 +77,9 @@ const RecipeCard = (props) => {
                <div onClick={onShare}>
                   <Icon alt="Share icon" src={share} />
                </div>
-               <div onClick={openDetails}>
+               <div onClick={openDetails('menu-click')}>
                   <Icon alt="Visa detaljer" src={expand} />
                </div>
-               {/* <ConditionalRender predicate={isSignedIn}>
-                  <div onClick={openEditModal}>
-                     <Icon alt="Edit icon" src={edit} />
-                  </div>
-                  <div onClick={onRemove(props.recipe.id)}>
-                     <Icon alt="Remove icon" src={remove} />
-                  </div>
-               </ConditionalRender> */}
             </div>
          </BackMenu>
       </Card>

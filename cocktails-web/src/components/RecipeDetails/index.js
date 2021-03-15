@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { sendEvent } from '../../common/analytics';
 import { useUserContext } from '../../contextProviders/userContext';
 import ConditionalRender from '../ConditionalRender';
 import Icon from '../Icon';
@@ -90,6 +92,11 @@ const Details = ({ recipe }) => {
 };
 
 const RecipeDetails = ({ recipe }) => {
+   useEffect(() => {
+      sendEvent('showdetails', {
+         recipe: recipe.name,
+      });
+   }, []);
    return <Details recipe={recipe} />;
 };
 

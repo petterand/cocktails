@@ -41,7 +41,8 @@
             height: 100%;
          }
 
-         body.modal-open, body.details-open {
+         body.modal-open,
+         body.details-open {
             height: 100vh;
             overflow-y: hidden;
          }
@@ -56,13 +57,22 @@
             }
          }
       </style>
-      <script async src="https://www.googletagmanager.com/gtag/js?id=G-2BBC2HTRXD"></script>
+      <script
+         async
+         src="https://www.googletagmanager.com/gtag/js?id=G-2BBC2HTRXD"
+      ></script>
       <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-      
-        gtag('config', 'G-2BBC2HTRXD');
+         if (window.location.hostname !== 'localhost') {
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+               dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+
+            gtag('config', 'G-2BBC2HTRXD');
+         } else {
+            window['ga-disable-G-2BBC2HTRXD'] = true;
+         }
       </script>
    </head>
    <body>
