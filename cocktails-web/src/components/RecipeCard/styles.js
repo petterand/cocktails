@@ -1,70 +1,169 @@
 import styled from 'styled-components';
 
-export const RecipeName = styled.p`
-   cursor: pointer;
-`;
-
-export const RecipeContent = styled.div`
-   border: 1px solid #e0e0e0;
-   border-left: 3px solid var(--aero-blue);
-   padding: 16px;
-   background-color: white;
-   z-index: 2;
+export const CocktailImages = styled.div`
    position: relative;
-   width: 100%;
+   overflow: hidden;
+   height: 70px;
+   flex: 1;
 
-   > div {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      font-size: 0.9rem;
+   ${(props) => props.shouldExpand && `height: auto; display: block;`}
+
+   img.blurred-image {
+      display: none;
    }
-   > p:first-child {
-      font-weight: 550;
-      margin-bottom: 8px;
-      font-size: 1rem;
-      text-transform: capitalize;
+
+   img {
+      width: 100%;
+      height: auto;
    }
-   ul {
-      margin: 16px 0 8px 0;
-      list-style-type: none;
-      padding: 0;
-      font-size: 0.9rem;
+   img:not(.placeholder) {
+      transform: ${(props) =>
+         props.shouldExpand ? 'none' : 'translateY(-20%)'};
+   }
+   img.placeholder {
+      margin: 8px auto 0 auto;
+      height: calc(100% - 8px);
+      padding: 0 8px;
+   }
+
+   @media screen and (min-width: 540px) {
+      ${(props) =>
+         props.shouldExpand &&
+         `
+         height: 300px;
+         display: flex;
+         justify-content: center;
+
+         img.placeholder {
+            margin: 0 auto;
+            height: 100%;
+         }
+
+         img.blurred-image {
+            display: block;
+            height: 100%;
+            position: absolute;
+            width: 100%;
+            filter: blur(2.1rem);
+            z-index: -1;
+         }
+         img {
+            height: 100%;
+            width: auto;
+         }
+      `}
    }
 `;
 
 export const Card = styled.div`
-   position: relative;
-   margin-bottom: 16px;
+   height: 150px;
+   border: 1px solid var(--timber-wolf);
+   border-left: 3px solid var(--aero-blue);
    display: flex;
-   user-select: none;
+   flex-direction: column;
+   cursor: pointer;
+   overflow: hidden;
+   will-change: height;
+   position: relative;
+
+   ${(props) => props.shouldExpand && `display: block;`}
+
+   @media screen and (min-width: 540px) {
+      ${(props) => props.shouldExpand && `grid-column: 1 / 3;`}
+   }
 `;
 
-export const BackMenu = styled.div`
-   position: absolute;
-   top: 0;
-   left: 0;
-   right: 0;
-   bottom: 0;
-   background-color: var(--viridian);
-   z-index: 1;
+export const RecipeBasicInfo = styled.div`
+   margin: 8px 0;
+   padding: 0 8px;
    display: flex;
-   > div {
-      width: 50px;
-      margin-left: auto;
-      padding: 8px 12px;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      > div {
-         margin-top: 12px;
+   align-items: center;
+   > p {
+      font-weight: 500;
+      font-size: 1.1rem;
+   }
+`;
+
+export const Icons = styled.div`
+   margin-left: auto;
+   display: flex;
+   align-items: flex-end;
+   > img {
+      height: 20px;
+      &:first-child {
+         margin-right: 4px;
+         height: 24px;
       }
    }
 `;
 
-export const Icon = styled.img`
-   width: 26px;
-   height: 26px;
-   display: block;
-   cursor: pointer;
+export const RecipeDetails = styled.div`
+   display: none;
+   margin: 8px;
+   font-size: 0.9rem;
+
+   ${(props) => props.shouldExpand && `display: block;`}
+
+   > ul {
+      list-style: none;
+      margin-bottom: 8px;
+   }
+   > p {
+      margin-top: 8px;
+      white-space: pre-wrap;
+      margin-bottom: 8px;
+   }
+`;
+
+export const RecipeMain = styled.div`
+   z-index: 2;
+   height: 100%;
+   display: flex;
+   flex-direction: column;
+   background-color: #fff;
+   position: relative;
+
+   ${(props) => props.shouldExpand && `height: auto;`}
+
+   &.open {
+      transform: translateX(-50px);
+   }
+`;
+
+export const BackMenu = styled.div`
+   position: absolute;
+   top: 1px;
+   right: 1px;
+   bottom: 1px;
+   width: 50%;
+   background-color: var(--viridian);
+   z-index: 1;
+   display: flex;
+   align-items: flex-end;
+   flex-direction: column;
+   padding: 8px 8px 0 0;
+
+   > div {
+      width: 32px;
+      height: 32px;
+      &:first-child {
+         margin-bottom: 16px;
+      }
+      > img {
+         width: 100%;
+      }
+   }
+`;
+
+export const MenuButton = styled.div`
+   width: 42px;
+   height: 42px;
+   padding: 12px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   position: absolute;
+   top: 0;
+   right: 0;
+   z-index: 3;
 `;

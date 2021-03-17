@@ -4,15 +4,12 @@ import Fuse from 'fuse.js';
 import Header from '../Header';
 import AddRecipe from '../AddRecipe';
 import RecipeList from '../RecipeList';
-import RecipeDetails from '../RecipeDetails';
 import { filterRecipes, buildFilterObject } from '../../common/filters';
 import { useRecipeContext } from '../../contextProviders/recipeContext';
 import ConditionalRender from '../ConditionalRender';
 import { useUserContext } from '../../contextProviders/userContext';
 import Button from '../Button';
 import NoSearchResult from '../NoSearchResult';
-import { useModalContext } from '../../contextProviders/modalContext';
-import navigate from '../../common/navigate';
 
 const ContentWrapper = styled.div`
    padding: 0 16px 16px;
@@ -41,9 +38,8 @@ function revertFuseObject(recipes) {
 }
 
 const Cocktails = () => {
-   const { recipes, deepLinkedRecipe } = useRecipeContext();
+   const { recipes } = useRecipeContext();
    const { isSignedIn } = useUserContext();
-   const { openModal, closeAll } = useModalContext();
    const [filters, setFilters] = useState([]);
    const [filterValues, setFilterValues] = useState({});
    const [shouldReset, setShouldReset] = useState(false);
@@ -54,19 +50,6 @@ const Cocktails = () => {
       useExtendedSearch: true,
    };
    const fuse = new Fuse(formatForFuse(recipes), fuseOptions);
-
-   useEffect(() => {
-      if (deepLinkedRecipe) {
-         openModal({
-            props: {
-               onClose: () => navigate(''),
-            },
-            body: <RecipeDetails recipe={deepLinkedRecipe} />,
-         });
-      } else {
-         closeAll();
-      }
-   }, [deepLinkedRecipe?.id]);
 
    useEffect(() => {
       setFilterValues(buildFilterObject(recipes));
@@ -93,6 +76,7 @@ const Cocktails = () => {
 
    const onSearch = (str, callback) => {
       if (!str) {
+         setSearchResult(null);
          return;
       }
       const result = fuse.search(`'${str}`);
@@ -146,7 +130,6 @@ const Cocktails = () => {
                </ResetFiltersWrapper>
             </ConditionalRender>
          </ContentWrapper>
-         {/* <RecipeDetails recipe={deepLinkedRecipe} /> */}
       </>
    );
 };

@@ -65,6 +65,7 @@ const RecipeContextProvider = (props) => {
    const getRecipeFromUrl = () => {
       const hash = window.location.hash;
       const urlId = hash.split('#')[1];
+
       if (recipes && urlId) {
          const recipe = recipes.find((r) => r.urlId === urlId);
          if (recipe) {

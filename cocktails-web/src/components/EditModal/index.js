@@ -30,7 +30,7 @@ function recipeToText(recipe) {
 }
 
 const getImageName = (recipeName) => {
-   const base = recipeName.replace(' ', '').toLowerCase();
+   const base = recipeName.replace(/\s/g, '').toLowerCase();
    return {
       jpg: `${base}.jpg`,
       webp: `${base}.webp`,

@@ -1,6 +1,5 @@
-import { lazy, Suspense, useEffect, useState } from 'react';
+import { lazy, Suspense } from 'react';
 import styled from 'styled-components';
-import useDeviceSize from '../../common/useDeviceSize';
 import Loading from '../Loading';
 
 const RecipeListWrapper = styled.div`
@@ -8,18 +7,16 @@ const RecipeListWrapper = styled.div`
    max-width: 780px;
 `;
 
+const RecipeGrid = styled.div`
+   display: grid;
+   grid-template-columns: repeat(var(--list-columns), 1fr);
+   row-gap: 16px;
+   column-gap: 16px;
+`;
+
 const RecipeCard = lazy(() => import('../RecipeCard'));
-const CascadingGrid = lazy(() => import('../CascadingGrid'));
 
 const RecipeList = (props) => {
-   const [noCols, setNoCols] = useState(3);
-
-   const deviceSize = useDeviceSize();
-
-   useEffect(() => {
-      setNoCols(deviceSize === 'small' ? 2 : 3);
-   }, [deviceSize]);
-
    const sortRecipes = (a, b) => {
       a = a.name.toLowerCase();
       b = b.name.toLowerCase();
@@ -37,11 +34,11 @@ const RecipeList = (props) => {
    return (
       <RecipeListWrapper>
          <Suspense fallback={<Loading />}>
-            <CascadingGrid noCols={noCols}>
+            <RecipeGrid>
                {sorted.map((recipe, i) => (
                   <RecipeCard key={recipe.id} recipeIndex={i} recipe={recipe} />
                ))}
-            </CascadingGrid>
+            </RecipeGrid>
          </Suspense>
       </RecipeListWrapper>
    );
