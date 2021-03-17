@@ -47,7 +47,6 @@ const RecipeCardWide = (props) => {
    useEffect(() => {
       if (deepLinkedRecipe?.id === recipe.id && !isExpanded) {
          setIsExpanded(true);
-         sendEvent('deeplinked', { event_label: recipe.name });
       }
    }, [deepLinkedRecipe?.id]);
 

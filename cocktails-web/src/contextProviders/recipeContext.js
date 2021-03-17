@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { sendEvent } from '../common/analytics';
 import {
    getCocktails,
    addCocktail,
@@ -68,16 +69,21 @@ const RecipeContextProvider = (props) => {
 
       if (recipes && urlId) {
          if (urlId === 'fredagscocktail') {
-            const latest = recipes
+            const recipe = recipes
                .filter((r) => Boolean(r.seenAsFridayCocktail))
                .sort(
                   (a, b) => b.seenAsFridayCocktail - a.seenAsFridayCocktail
                )[0];
-            setDeepLinkedRecipe(latest);
+            setDeepLinkedRecipe(recipe);
+            sendEvent('deeplinked', {
+               event_category: 'fredagscocktail',
+               event_label: recipe.name,
+            });
          } else {
             const recipe = recipes.find((r) => r.urlId === urlId);
             if (recipe) {
                setDeepLinkedRecipe(recipe);
+               sendEvent('deeplinked', { event_label: recipe.name });
             } else {
                setDeepLinkedRecipe(null);
             }
