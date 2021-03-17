@@ -74,11 +74,13 @@ const RecipeContextProvider = (props) => {
                .sort(
                   (a, b) => b.seenAsFridayCocktail - a.seenAsFridayCocktail
                )[0];
-            setDeepLinkedRecipe(recipe);
-            sendEvent('deeplinked', {
-               event_category: 'fredagscocktail',
-               event_label: recipe.name,
-            });
+            if (recipe) {
+               setDeepLinkedRecipe(recipe);
+               sendEvent('deeplinked', {
+                  event_category: 'fredagscocktail',
+                  event_label: recipe.name,
+               });
+            }
          } else {
             const recipe = recipes.find((r) => r.urlId === urlId);
             if (recipe) {
