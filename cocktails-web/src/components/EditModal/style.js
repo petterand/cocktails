@@ -36,6 +36,7 @@ export const ButtonWrapper = styled.div`
 export const ImageRow = styled.div`
    height: 50px;
    margin-bottom: 8px;
+   margin-top: 16px;
    display: flex;
    * {
       pointer-events: unset;
@@ -46,6 +47,19 @@ export const RemoveWrapper = styled.div`
    height: 32px;
    width: 32px;
    padding: 6px;
+   > img {
+      height: 100%;
+   }
+`;
+
+export const HasBeenMade = styled.div`
+   height: 32px;
+   width: 32px;
+   padding: 6px 4px 4px;
+   cursor: pointer;
+
+   ${(props) => !props.active && 'opacity: .2;'}
+
    > img {
       height: 100%;
    }

@@ -146,6 +146,7 @@ export const BackMenu = styled.div`
    > div {
       width: 32px;
       height: 32px;
+      padding: 4px;
       &:first-child {
          margin-bottom: 16px;
       }
@@ -166,4 +167,6 @@ export const MenuButton = styled.div`
    top: 0;
    right: 0;
    z-index: 3;
+   border-radius: 100%;
+   background-color: #ffffff55;
 `;

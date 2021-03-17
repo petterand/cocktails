@@ -6,6 +6,7 @@ import { useModalContext } from '../../contextProviders/modalContext';
 import { useRecipeContext } from '../../contextProviders/recipeContext';
 import { useToastContext } from '../../contextProviders/toastContext';
 import removeIcon from '../../../images/remove.svg';
+import shakeshake from '../../../images/shakeshake.svg';
 import Button from '../Button';
 import ConditionalRender from '../ConditionalRender';
 import FileDrop from '../FileDrop';
@@ -16,6 +17,7 @@ import PreviewImage from './PreviewImage';
 import {
    ButtonWrapper,
    EditTextBox,
+   HasBeenMade,
    ImageRow,
    RemoveWrapper,
    Wrapper,
@@ -60,6 +62,7 @@ const EditModal = (props) => {
    const [imageFile, setImageFile] = useState(null);
    const [localImage, setLocalImage] = useState(null);
    const [shouldDeleteImage, setShouldDeleteImage] = useState(false);
+   const [seenAsFridayCocktail, setSeenAsFridayCocktail] = useState(null);
    const { updateRecipe, removeRecipe } = useRecipeContext();
    const { closeModal, openModal } = useModalContext();
    const { showToast } = useToastContext();
@@ -69,6 +72,7 @@ const EditModal = (props) => {
    useEffect(() => {
       setPreparation(recipe.preparation);
       setServingStyle(recipe.servingStyle);
+      setSeenAsFridayCocktail(recipe.seenAsFridayCocktail);
    }, [recipe]);
 
    const onRemove = (id) => async () => {
@@ -92,8 +96,10 @@ const EditModal = (props) => {
             ...recipe,
             preparation,
             servingStyle,
+            seenAsFridayCocktail,
             ...processRecipe(inputRef.current.value),
          };
+
          if (shouldDeleteImage) {
             await deleteImage(newRecipe.image);
             newRecipe.image = '';
@@ -149,6 +155,16 @@ const EditModal = (props) => {
       }
    };
 
+   const updateHasBeenMade = () => {
+      if (seenAsFridayCocktail) {
+         setSeenAsFridayCocktail(null);
+      } else {
+         setSeenAsFridayCocktail(
+            recipe.seenAsFridayCocktail || new Date().getTime()
+         );
+      }
+   };
+
    const image = getImage();
 
    return (
@@ -171,6 +187,13 @@ const EditModal = (props) => {
             <RemoveWrapper onClick={onRemove(recipe.id)}>
                <img src={removeIcon} />
             </RemoveWrapper>
+            <Divider />
+            <HasBeenMade
+               active={Boolean(seenAsFridayCocktail)}
+               onClick={updateHasBeenMade}
+            >
+               <img src={shakeshake} alt="has been made" />
+            </HasBeenMade>
             <Button variant="primary" onClick={onSave} busy={busy}>
                Spara
             </Button>

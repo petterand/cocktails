@@ -129,6 +129,7 @@ module.exports = [
       ],
    },
    {
+      mode: 'production',
       entry: path.resolve(__dirname, 'public/sw.js'),
       output: {
          filename: 'sw.js',

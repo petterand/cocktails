@@ -67,11 +67,20 @@ const RecipeContextProvider = (props) => {
       const urlId = hash.split('#')[1];
 
       if (recipes && urlId) {
-         const recipe = recipes.find((r) => r.urlId === urlId);
-         if (recipe) {
-            setDeepLinkedRecipe(recipe);
+         if (urlId === 'fredagscocktail') {
+            const latest = recipes
+               .filter((r) => Boolean(r.seenAsFridayCocktail))
+               .sort(
+                  (a, b) => b.seenAsFridayCocktail - a.seenAsFridayCocktail
+               )[0];
+            setDeepLinkedRecipe(latest);
          } else {
-            setDeepLinkedRecipe(null);
+            const recipe = recipes.find((r) => r.urlId === urlId);
+            if (recipe) {
+               setDeepLinkedRecipe(recipe);
+            } else {
+               setDeepLinkedRecipe(null);
+            }
          }
       } else {
          setDeepLinkedRecipe(null);
