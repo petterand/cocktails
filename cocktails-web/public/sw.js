@@ -1,5 +1,5 @@
 const API_URL = process.env.API_URL;
-const CACHE_NAME = 'cocktails-cache-v1';
+const CACHE_NAME = process.env.CACHE_NAME;
 
 function cache(request, response) {
    if (response.type === 'error' || response.type === 'opaque') {

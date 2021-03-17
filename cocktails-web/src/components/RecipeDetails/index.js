@@ -61,10 +61,10 @@ const Details = ({ recipe }) => {
          <ConditionalRender predicate={recipe.image}>
             <div className="main-image">
                <img
-                  src={`${process.env.S3_BUCKET}${recipe.image}`}
+                  src={`${process.env.IMAGE_BASE}${recipe.image}`}
                   className="blur-image"
                />
-               <img src={`${process.env.S3_BUCKET}${recipe.image}`} />
+               <img src={`${process.env.IMAGE_BASE}${recipe.image}`} />
             </div>
          </ConditionalRender>
          <Header>

@@ -38,7 +38,7 @@ const getImageName = (recipeName) => {
 };
 
 function waitForImageOnS3(filename) {
-   const src = `${process.env.S3_BUCKET}${filename}`;
+   const src = `${process.env.IMAGE_BASE}${filename}`;
    return new Promise((resolve) => {
       const interval = setInterval(() => {
          const img = new Image();
@@ -142,7 +142,7 @@ const EditModal = (props) => {
          return null;
       }
       if (recipe.image) {
-         return `${process.env.S3_BUCKET}${recipe.image}`;
+         return `${process.env.IMAGE_BASE}${recipe.image}`;
       }
       if (localImage) {
          return localImage;

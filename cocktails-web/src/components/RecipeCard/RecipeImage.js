@@ -6,7 +6,7 @@ const RecipeImage = ({ recipe, shouldExpand, onLoad }) => {
    let isPlaceHolder = false;
    const getImage = () => {
       if (image) {
-         return `${process.env.S3_BUCKET}${image}`;
+         return `${process.env.IMAGE_BASE}${image}`;
       }
       isPlaceHolder = true;
       return placeholderImage;
@@ -19,6 +19,7 @@ const RecipeImage = ({ recipe, shouldExpand, onLoad }) => {
             alt={`Blurred image ${name}`}
             className="blurred-image"
             crossOrigin="anonymous"
+            loading="lazy"
          />
          <img
             src={getImage()}
@@ -26,6 +27,7 @@ const RecipeImage = ({ recipe, shouldExpand, onLoad }) => {
             alt={`Image ${name}`}
             onLoad={onLoad}
             crossOrigin="anonymous"
+            loading="lazy"
          />
       </CocktailImages>
    );

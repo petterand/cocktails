@@ -86,7 +86,7 @@ async function deleteImage(filename: string) {
 
    if (isValid) {
       await axios.delete(`${apiUrl}/cocktails/image/${filename}`, { headers });
-      await deleteCache(`${process.env.S3_BUCKET}${filename}`);
+      await deleteCache(`${process.env.IMAGE_BASE}${filename}`);
    }
 }
 
