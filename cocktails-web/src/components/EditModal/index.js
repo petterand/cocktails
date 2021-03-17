@@ -46,6 +46,7 @@ function waitForImageOnS3(filename) {
             clearInterval(interval);
             resolve();
          };
+         img.crossOrigin = 'anonymous';
          img.src = src;
       }, 1500);
    });

@@ -18,12 +18,14 @@ const RecipeImage = ({ recipe, shouldExpand, onLoad }) => {
             src={getImage()}
             alt={`Blurred image ${name}`}
             className="blurred-image"
+            crossOrigin="anonymous"
          />
          <img
             src={getImage()}
             className={isPlaceHolder ? 'placeholder' : ''}
             alt={`Image ${name}`}
             onLoad={onLoad}
+            crossOrigin="anonymous"
          />
       </CocktailImages>
    );

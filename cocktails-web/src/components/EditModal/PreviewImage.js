@@ -25,7 +25,7 @@ const ImageWrapper = styled.div`
 const PreviewImage = (props) => {
    return (
       <ImageWrapper>
-         <img src={props.image} />
+         <img src={props.image} crossOrigin="anonymous" />
          <span onClick={props.onDeleteImage}>&times;</span>
       </ImageWrapper>
    );
