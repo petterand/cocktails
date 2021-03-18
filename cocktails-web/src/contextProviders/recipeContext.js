@@ -7,6 +7,7 @@ import {
    updateCocktail,
 } from '../common/api';
 import getUrlId from '../common/getUrlId';
+import navigate from '../common/navigate';
 
 const RecipeContext = React.createContext({});
 
@@ -18,17 +19,15 @@ const mapCocktails = (cocktails) =>
       urlId: getUrlId(c),
    }));
 
+function getLatestFridayCocktail(recipes) {
+   return recipes
+      .filter((r) => Boolean(r.seenAsFridayCocktail))
+      .sort((a, b) => b.seenAsFridayCocktail - a.seenAsFridayCocktail)[0];
+}
+
 const RecipeContextProvider = (props) => {
    const [recipes, setRecipes] = useState([]);
    const [deepLinkedRecipe, setDeepLinkedRecipe] = useState(null);
-
-   useEffect(() => {
-      navigator.serviceWorker.onmessage = (event) => {
-         const { data } = JSON.parse(event.data);
-         const cocktails = mapCocktails(data);
-         setRecipes(cocktails);
-      };
-   }, []);
 
    const fetchCocktails = async () => {
       let cocktails = await getCocktails();
@@ -63,35 +62,32 @@ const RecipeContextProvider = (props) => {
       }
    };
 
-   const getRecipeFromUrl = () => {
-      const hash = window.location.hash;
-      const urlId = hash.split('#')[1];
+   const setRecipeFromUrl = () => {
+      if (recipes?.length > 0) {
+         const paths = location.pathname.split('/').filter(Boolean);
+         const urlId = paths[0];
+         let recipe = null;
+         let event_category = null;
 
-      if (recipes && urlId) {
          if (urlId === 'fredagscocktail') {
-            const recipe = recipes
-               .filter((r) => Boolean(r.seenAsFridayCocktail))
-               .sort(
-                  (a, b) => b.seenAsFridayCocktail - a.seenAsFridayCocktail
-               )[0];
-            if (recipe) {
-               setDeepLinkedRecipe(recipe);
-               sendEvent('deeplinked', {
-                  event_category: 'fredagscocktail',
-                  event_label: recipe.name,
-               });
+            recipe = getLatestFridayCocktail(recipes);
+            event_category = 'fredagscocktail';
+         } else if (urlId) {
+            recipe = recipes.find((r) => r.urlId === urlId);
+            if (!recipe) {
+               navigate('/');
             }
+            event_category = 'direct';
          } else {
-            const recipe = recipes.find((r) => r.urlId === urlId);
-            if (recipe) {
-               setDeepLinkedRecipe(recipe);
-               sendEvent('deeplinked', { event_label: recipe.name });
-            } else {
-               setDeepLinkedRecipe(null);
-            }
+            window.dispatchEvent(new Event('collapseall'));
          }
-      } else {
-         setDeepLinkedRecipe(null);
+         if (recipe) {
+            sendEvent('deeplinked', {
+               event_category,
+               event_label: recipe.name,
+            });
+         }
+         setDeepLinkedRecipe(recipe);
       }
    };
 
@@ -100,10 +96,31 @@ const RecipeContextProvider = (props) => {
    }, []);
 
    useEffect(() => {
-      getRecipeFromUrl();
-      window.addEventListener('hashchange', getRecipeFromUrl);
+      navigator.serviceWorker.onmessage = (event) => {
+         const { data } = JSON.parse(event.data);
+         const cocktails = mapCocktails(data);
+         setRecipes(cocktails);
+      };
+   }, []);
 
-      return () => window.removeEventListener('hashchange', getRecipeFromUrl);
+   useEffect(() => {
+      setRecipeFromUrl();
+
+      function onPopState(e) {
+         if (e.state) {
+            setDeepLinkedRecipe(e.state);
+         } else {
+            setRecipeFromUrl();
+         }
+      }
+
+      window.addEventListener('popstate', onPopState);
+      window.addEventListener('recipechanged', setRecipeFromUrl);
+
+      return () => {
+         window.removeEventListener('popstate', onPopState);
+         window.removeEventListener('recipechanged', setRecipeFromUrl);
+      };
    }, [recipes]);
 
    return (

@@ -42,6 +42,9 @@ module.exports = [
       devServer: {
          hot: true,
          disableHostCheck: true,
+         historyApiFallback: {
+            index: 'index.html',
+         },
       },
       resolve: {
          extensions: ['.ts', '.js'],

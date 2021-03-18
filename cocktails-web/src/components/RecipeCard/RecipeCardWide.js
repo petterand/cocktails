@@ -39,14 +39,32 @@ const RecipeCardWide = (props) => {
    const [isExpanded, setIsExpanded] = useState(false);
    const [imageLoaded, setImageLoaded] = useState(null);
    const [isMenuOpen, setIsMenuOpen] = useState(false);
+   const [isInteractedWith, setIsInteractedWith] = useState(false);
    const { deepLinkedRecipe } = useRecipeContext();
    const { openModal } = useModalContext();
    const { showToast } = useToastContext();
    const { isSignedIn } = useUserContext();
 
    useEffect(() => {
-      if (deepLinkedRecipe?.id === recipe.id && !isExpanded) {
-         setIsExpanded(true);
+      function collapse() {
+         setIsExpanded(false);
+      }
+      window.addEventListener('collapseall', collapse);
+      return () => window.removeEventListener('collapseall', collapse);
+   }, []);
+
+   useEffect(() => {
+      if (deepLinkedRecipe?.id === recipe.id) {
+         if (!isExpanded) {
+            setIsExpanded(true);
+            setIsInteractedWith(true);
+         } else {
+            const el = cardRef.current;
+            window.scrollTo({
+               top: el.offsetTop - 16,
+               behavior: 'smooth',
+            });
+         }
       }
    }, [deepLinkedRecipe?.id]);
 
@@ -66,7 +84,7 @@ const RecipeCardWide = (props) => {
                });
             },
          });
-      } else if (!isExpanded) {
+      } else if (!isExpanded && isInteractedWith) {
          anime({
             targets: el,
             easing: 'linear',
@@ -77,12 +95,17 @@ const RecipeCardWide = (props) => {
    }, [isExpanded, imageLoaded, recipe.image]);
 
    const onClick = () => {
+      setIsInteractedWith(true);
+      if (isMenuOpen) {
+         setIsMenuOpen(false);
+         return;
+      }
       if (!isExpanded) {
          sendEvent('expand', { event_label: recipe.name });
-         setIsExpanded(true);
+         navigate(`/${recipe.urlId}`, recipe);
       } else {
          if (deepLinkedRecipe) {
-            navigate('');
+            navigate('/');
          }
          setIsExpanded(false);
          setIsMenuOpen(false);
@@ -113,7 +136,7 @@ const RecipeCardWide = (props) => {
    const onShare = async (e) => {
       e.stopPropagation();
       sendEvent(`share`, { event_label: recipe.name });
-      const url = `${window.location.origin}/#${props.recipe.urlId}`;
+      const url = `${window.location.origin}/${props.recipe.urlId}`;
       await navigator.clipboard.writeText(url);
       showToast({
          variant: 'info',

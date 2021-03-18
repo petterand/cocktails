@@ -66,6 +66,8 @@ export const Card = styled.div`
    will-change: height;
    position: relative;
    -webkit-tap-highlight-color: transparent;
+   content-visibility: auto;
+   contain-intrinsic-size: 150px;
 
    ${(props) => props.shouldExpand && `display: block;`}
 
