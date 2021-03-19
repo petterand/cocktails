@@ -133,7 +133,7 @@ export const RecipeMain = styled.div`
    }
 `;
 
-export const BackMenu = styled.div`
+export const BackMenuWrapper = styled.div`
    position: absolute;
    top: 1px;
    right: 1px;

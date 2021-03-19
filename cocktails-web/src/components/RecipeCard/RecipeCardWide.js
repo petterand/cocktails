@@ -1,28 +1,24 @@
-import { useEffect, useRef, useState } from 'react';
+import { lazy, useEffect, useRef, useState } from 'react';
 import anime from 'animejs/lib/anime.es';
 import threeDots from '../../../images/three_dots.svg';
-import editIcon from '../../../images/edit_white.svg';
-import shareIcon from '../../../images/share_white.svg';
+
 import Icon from '../Icon';
 import { useRecipeContext } from '../../contextProviders/recipeContext';
 import navigate from '../../common/navigate';
 import ConditionalRender from '../ConditionalRender';
-import { useModalContext } from '../../contextProviders/modalContext';
-import EditModal from '../EditModal';
-import { useToastContext } from '../../contextProviders/toastContext';
-import { useUserContext } from '../../contextProviders/userContext';
 import { sendEvent } from '../../common/analytics';
 import {
    Icons,
    MenuButton,
    RecipeBasicInfo,
    RecipeMain,
-   BackMenu,
    Card,
    RecipeDetails,
 } from './styles';
-
 import RecipeImage from './RecipeImage';
+
+const backMenuPromise = import('./BackMenu');
+const BackMenu = lazy(() => backMenuPromise);
 
 const OpenMenuButton = (props) => {
    return (
@@ -41,9 +37,6 @@ const RecipeCardWide = (props) => {
    const [isMenuOpen, setIsMenuOpen] = useState(false);
    const [isInteractedWith, setIsInteractedWith] = useState(false);
    const { deepLinkedRecipe } = useRecipeContext();
-   const { openModal } = useModalContext();
-   const { showToast } = useToastContext();
-   const { isSignedIn } = useUserContext();
 
    useEffect(() => {
       function collapse() {
@@ -121,30 +114,6 @@ const RecipeCardWide = (props) => {
       setIsMenuOpen((s) => !s);
    };
 
-   const closeMenu = (e) => {
-      e.stopPropagation();
-      setIsMenuOpen(false);
-   };
-
-   const openEditModal = (e) => {
-      e.stopPropagation();
-      openModal({
-         body: <EditModal value={recipe} />,
-      });
-   };
-
-   const onShare = async (e) => {
-      e.stopPropagation();
-      sendEvent(`share`, { event_label: recipe.name });
-      const url = `${window.location.origin}/${props.recipe.urlId}`;
-      await navigator.clipboard.writeText(url);
-      showToast({
-         variant: 'info',
-         timeout: 3000,
-         text: 'Url kopierad till urklipp',
-      });
-   };
-
    return (
       <Card onClick={onClick} ref={cardRef} shouldExpand={isExpanded}>
          <RecipeMain
@@ -178,16 +147,7 @@ const RecipeCardWide = (props) => {
                </ConditionalRender>
             </RecipeDetails>
          </RecipeMain>
-         <BackMenu onClick={closeMenu}>
-            <ConditionalRender predicate={isSignedIn}>
-               <div onClick={openEditModal}>
-                  <img src={editIcon} alt={`edit ${recipe.name}`} />
-               </div>
-            </ConditionalRender>
-            <div onClick={onShare}>
-               <img src={shareIcon} alt={`share ${recipe.name}`} />
-            </div>
-         </BackMenu>
+         <BackMenu recipe={recipe} setIsMenuOpen={setIsMenuOpen} />
       </Card>
    );
 };
