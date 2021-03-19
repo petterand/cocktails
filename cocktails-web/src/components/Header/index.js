@@ -58,6 +58,11 @@ const Header = (props) => {
       setMenuVisible(false);
    };
 
+   const onInputFocus = () => {
+      animate(0);
+      setMenuVisible(false);
+   };
+
    return (
       <HeaderWrapper>
          <Menu
@@ -70,7 +75,11 @@ const Header = (props) => {
             onTouchMove={setHandler(touchMove)}
             onTouchEnd={setHandler(touchEnd)}
          >
-            <SearchAndFilter {...props} menuVisible={menuVisible} />
+            <SearchAndFilter
+               {...props}
+               menuVisible={menuVisible}
+               onFocus={onInputFocus}
+            />
          </HeaderElement>
       </HeaderWrapper>
    );

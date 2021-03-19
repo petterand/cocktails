@@ -62,6 +62,7 @@ const Search = (props) => {
                type="text"
                placeholder="Sök"
                onKeyUp={onKeyUp}
+               onFocus={props.onFocus}
                ref={inputRef}
                aria-label="Sök"
             />
