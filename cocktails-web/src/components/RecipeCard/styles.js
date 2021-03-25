@@ -167,8 +167,8 @@ export const MenuButton = styled.div`
    justify-content: center;
    align-items: center;
    position: absolute;
-   top: 0;
-   right: 0;
+   top: 2px;
+   right: 2px;
    z-index: 3;
    border-radius: 100%;
    background-color: #ffffff55;

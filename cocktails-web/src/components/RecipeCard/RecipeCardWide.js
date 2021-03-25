@@ -1,4 +1,4 @@
-import { lazy, useEffect, useRef, useState } from 'react';
+import React, { lazy, useEffect, useRef, useState } from 'react';
 import anime from 'animejs/lib/anime.es';
 import threeDots from '../../../images/three_dots.svg';
 
@@ -37,6 +37,19 @@ const RecipeCardWide = (props) => {
    const [isMenuOpen, setIsMenuOpen] = useState(false);
    const [isInteractedWith, setIsInteractedWith] = useState(false);
    const { deepLinkedRecipe } = useRecipeContext();
+
+   useEffect(() => {
+      function resize() {
+         const el = cardRef.current;
+         const mainEl = mainRef.current;
+         if (isExpanded && mainEl.scrollHeight > 0) {
+            el.style.height = `${mainEl.scrollHeight}px`;
+         }
+      }
+      if (isExpanded) {
+         resize();
+      }
+   }, [isExpanded, recipe]);
 
    useEffect(() => {
       function collapse() {
@@ -152,4 +165,4 @@ const RecipeCardWide = (props) => {
    );
 };
 
-export default RecipeCardWide;
+export default React.memo(RecipeCardWide);
