@@ -48,13 +48,6 @@ self.addEventListener('fetch', function (event) {
       if (event.request.url == `${API_URL}/cocktails`) {
          event.respondWith(caches.match(event.request));
          event.waitUntil(update(event.request).then(refresh));
-      } else if (event.request.destination === 'image') {
-         event.respondWith(
-            caches.match(event.request).then((res) => {
-               return res || fetch(event.request, { mode: 'cors' });
-            })
-         );
-         event.waitUntil(update(event.request));
       }
    }
 });
