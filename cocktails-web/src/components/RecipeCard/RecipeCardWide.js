@@ -37,6 +37,7 @@ const RecipeCardWide = (props) => {
    const [isMenuOpen, setIsMenuOpen] = useState(false);
    const [isInteractedWith, setIsInteractedWith] = useState(false);
    const { deepLinkedRecipe } = useRecipeContext();
+   const isDeeplinkedRecipe = deepLinkedRecipe?.id === recipe?.id;
 
    useEffect(() => {
       function resize() {
@@ -141,6 +142,7 @@ const RecipeCardWide = (props) => {
                recipe={recipe}
                shouldExpand={isExpanded}
                onLoad={onImageLoad}
+               lazyLoad={!isDeeplinkedRecipe}
             />
             <RecipeBasicInfo>
                <p>{recipe.name}</p>

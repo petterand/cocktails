@@ -1,7 +1,7 @@
 import placeholderImage from '../../../images/image_placeholder.svg';
 import { CocktailImages } from './styles';
 
-const RecipeImage = ({ recipe, shouldExpand, onLoad }) => {
+const RecipeImage = ({ recipe, shouldExpand, onLoad, lazyLoad }) => {
    const { image, name } = recipe;
    let isPlaceHolder = false;
    const getImage = () => {
@@ -27,7 +27,7 @@ const RecipeImage = ({ recipe, shouldExpand, onLoad }) => {
             alt={`Image ${name}`}
             onLoad={onLoad}
             crossOrigin="anonymous"
-            loading="lazy"
+            loading={lazyLoad ? 'lazy' : 'eager'}
          />
       </CocktailImages>
    );
