@@ -34,7 +34,7 @@ describe('buildFilterObject', () => {
             'espresso',
             'gin',
             'citronjuice',
-            'Honungslag',
+            'honungslag',
             'gin',
             'tonic',
          ],

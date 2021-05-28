@@ -24,20 +24,13 @@ import {
 } from './style';
 import ConfirmModal from '../ConfirmModal';
 import navigate from '../../common/navigate';
+import { getImageName } from './getImageName';
 
 function recipeToText(recipe) {
    return `${recipe.name}\r\n\r\n${recipe.ingredients.join('\r\n')}\r\n\r\n${
       recipe.description || ''
    }`;
 }
-
-const getImageName = (recipeName) => {
-   const base = recipeName.replace(/\s/g, '').toLowerCase();
-   return {
-      jpg: `${base}.jpg`,
-      webp: `${base}.webp`,
-   };
-};
 
 function waitForImageOnS3(filename) {
    const src = `${process.env.IMAGE_BASE}${filename}`;
