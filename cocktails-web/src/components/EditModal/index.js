@@ -42,7 +42,7 @@ function waitForImageOnS3(filename) {
             resolve();
          };
          img.crossOrigin = 'anonymous';
-         img.src = src;
+         img.src = src + `?${new Date().getTime()}`;
       }, 1500);
    });
 }
